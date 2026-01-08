@@ -17,5 +17,5 @@ The plan is to leverage Visual Studio Code with the Angular CLI installed.  I'll
 
 Phase 1 will be to get the Angular application created with minimum functionality. (Complete)
 Phase 2 will be to get the Angular application deployed to the S3 bucket successfully, and accessible to the outside world. (Complete)
-Phase 3 will be setting up CI/CD to the S3 bucket. (In Progress) 
+Phase 3 will be setting up CI/CD to the S3 bucket. (In Progress)
 Phase 4 will be the iterative process of building out the blogging features.
