@@ -3,7 +3,7 @@ Repository for my Blog application.
 
 # What problem does this solve?
 
-I created this repository to connect the dots between several learning initiatives I've embarked on over the last year.  My north star focus for this project is to create a simple blog site leveraging Angular and deploy the application to my Amazon S3 bucket.
+I created this repository to connect the dots between several learning initiatives I've embarked on over the last year.  My north star focus for this project is to create a simple blog site leveraging Angular and deploy the application to my Amazon S3 bucket. 
 
 # Who is it for?
 
