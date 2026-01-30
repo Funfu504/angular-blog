@@ -1,0 +1,27 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "left top-right"
+    "left bottom-right";
+  height: 100vh;
+  gap: 16px;
+  border: 1px dashed red;
+}
+
+.left {
+  grid-area: left;
+}
+
+.top-right {
+  grid-area: top-right;
+}
+
+.bottom-right {
+  grid-area: bottom-right;
+}
+
+.cell {
+  border: 1px solid #ccc; /* just for visibility */
+}

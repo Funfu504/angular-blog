@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center;     /* vertical */
+}
+
+.container img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+}

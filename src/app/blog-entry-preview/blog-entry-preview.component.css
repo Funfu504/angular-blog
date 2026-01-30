@@ -1,0 +1,21 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 30h;
+  grid-template-areas:
+    "left right";
+  gap: 16px;
+}
+.left {
+  grid-area: left;
+}
+
+.right {
+  grid-area: right;
+}
+
+.grid img {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+}
