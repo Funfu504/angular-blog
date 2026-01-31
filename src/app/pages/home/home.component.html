@@ -1,6 +1,8 @@
 <div class="grid">
-  <div class="left"><app-blog-entry></app-blog-entry></div>
-  <div class="top-right"><app-blog-entry-preview></app-blog-entry-preview></div>
-  <div class="bottom-right"><app-blog-entry-preview></app-blog-entry-preview></div>
+  <div class="left" *ngIf="entry$ | async as entry"><app-blog-entry [blogEntryId] = "entry.id"></app-blog-entry></div>
+  <ng-container *ngIf="previews$ | async as previews">
+  <div class="top-right" *ngIf="previews[0]"><app-blog-entry-preview [blogEntryId] = "previews[0].id"></app-blog-entry-preview></div>
+  <div class="bottom-right" *ngIf="previews[1]"><app-blog-entry-preview [blogEntryId] = "previews[1].id"></app-blog-entry-preview></div>
+  </ng-container>
 </div>
 

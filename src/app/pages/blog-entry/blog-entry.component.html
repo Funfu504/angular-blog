@@ -1,9 +1,5 @@
-<div class="container">
-    <p>{{entry.title}}</p>
-</div>
-<div class="container">
-    <img src={{entry.imageUrl}} alt={{entry.imageAltText}}>
-</div>
-<div>
+<div class="container" *ngIf="entry$ | async as entry">
+    <p class="centered">{{entry.title}}</p>
+    <img class="centered" src={{entry.imageUrl}} alt={{entry.imageAltText}}>
     <p>{{entry.blogText}}</p>
 </div>

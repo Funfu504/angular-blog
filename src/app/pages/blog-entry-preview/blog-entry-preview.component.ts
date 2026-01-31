@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IBlogEntry } from '../../core/models/blog-entry';
+import { BlogService } from 'src/app/core/services/blog.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-blog-entry-preview',
@@ -7,11 +9,12 @@ import { IBlogEntry } from '../../core/models/blog-entry';
   styleUrls: ['./blog-entry-preview.component.css']
 })
 export class BlogEntryPreviewComponent {
-  entry : IBlogEntry = {
-    id: 2,
-    title: "Learning Python",
-    imageUrl: "/assets/images/PythonLogo.png",
-    imageAltText: "Official Python Logo",
-    blogText: "Shortened Wall of Text"
-  }
+   @Input() blogEntryId! : number;
+    entry$! : Observable<IBlogEntry | undefined>;
+
+  constructor(private blogSvc : BlogService) { }
+
+  ngOnInit() {
+    this.entry$ = this.blogSvc.getPostById(this.blogEntryId);    
+  } 
 }

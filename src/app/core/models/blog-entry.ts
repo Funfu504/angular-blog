@@ -4,4 +4,6 @@ export interface IBlogEntry {
     imageUrl : string;
     imageAltText : string;
     blogText : string;
+    postDate : Date;
+    featured : boolean;
 }
