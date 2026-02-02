@@ -7,6 +7,7 @@ import { BlogEntryComponent } from './pages/blog-entry/blog-entry.component';
 import { BlogEntryPreviewComponent } from './pages/blog-entry-preview/blog-entry-preview.component';
 import { SiteHeaderComponent } from './pages/site-header/site-header.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AboutComponent } from './pages/about/about.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { AppRoutingModule } from './app-routing.module';
     HomeComponent,
     BlogEntryComponent,
     BlogEntryPreviewComponent,
-    SiteHeaderComponent
+    SiteHeaderComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

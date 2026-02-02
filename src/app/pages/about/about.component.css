@@ -1,0 +1,8 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  -ms-grid-column-align: center;
+  height: 90vh;
+  gap: 16px;
+}

@@ -6,8 +6,7 @@
     "left top-right"
     "left bottom-right";
   height: 90vh;
-  gap: 16px;
-  border: 1px dashed red;
+  gap: 16px;  
 }
 
 .left {

@@ -26,6 +26,14 @@ export class BlogService {
     );
   }
 
+  //the About Me Post is going to be the FIRST post into the system...this will eventually be a problem.
+  //for now it's fine, but eventually we'll just put it in as a special Type and just fetch that one.
+  getAboutMePost(): Observable<IBlogEntry | undefined> {
+    return this.sortBlogPosts().pipe(
+      map(items => items?.[items.length-1])
+    )
+  }
+
   getFeaturedPosts(max : number): Observable<IBlogEntry[] | undefined> {
     return this.sortBlogPosts().pipe(
       map(items => items?.filter(items => items.featured === true).slice(0,max))
@@ -63,7 +71,16 @@ export class BlogService {
         blogText: "Wall of Text",
         postDate: new Date(2026, 1, 29),
         featured: true
-      }
+      },
+      {
+        id: 4,
+        title: "About Me",
+        imageUrl: "",
+        imageAltText: "none",
+        blogText: "I am the owner of this blog.",
+        postDate: new Date(2026, 1, 1),
+        featured: false
+      }      
     ]
   }
 }
