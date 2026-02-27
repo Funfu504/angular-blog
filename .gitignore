@@ -1,7 +1,7 @@
 # =========================
 # Environment files
 # =========================
-/.env
+.env
 
 # =========================
 # Angular specific
@@ -49,3 +49,6 @@ venv/
 # Coverage
 .coverage
 htmlcov/
+
+#module installs
+*.egg-info/
