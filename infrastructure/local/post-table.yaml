@@ -1,0 +1,12 @@
+TableName: Blog_Post
+BillingMode: PAY_PER_REQUEST
+AttributeDefinitions:
+  - AttributeName: Post_Id
+    AttributeType: S
+  - AttributeName: Post_Element_Type
+    AttributeType: S    
+KeySchema:
+  - AttributeName: Post_Id
+    KeyType: HASH
+  - AttributeName: Post_Element_Type
+    KeyType: RANGE 
