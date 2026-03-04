@@ -4,9 +4,30 @@ AttributeDefinitions:
   - AttributeName: Post_Id
     AttributeType: S
   - AttributeName: Post_Element_Type
-    AttributeType: S    
+    AttributeType: S
+  - AttributeName: Post_Date
+    AttributeType: S
+  - AttributeName: Featured_Post_Date
+    AttributeType: S
 KeySchema:
   - AttributeName: Post_Id
     KeyType: HASH
   - AttributeName: Post_Element_Type
     KeyType: RANGE 
+GlobalSecondaryIndexes:
+  - IndexName: PostsByPostDate
+    KeySchema:
+      - AttributeName: Post_Element_Type
+        KeyType: HASH
+      - AttributeName: Post_Date
+        KeyType: RANGE
+    Projection:
+      ProjectionType: ALL
+  - IndexName: PostsByFeaturePostDate
+    KeySchema:
+      - AttributeName: Post_Element_Type
+        KeyType: HASH
+      - AttributeName: Featured_Post_Date
+        KeyType: RANGE
+    Projection:
+      ProjectionType: ALL
