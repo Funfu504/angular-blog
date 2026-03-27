@@ -1,29 +1,53 @@
 import { Injectable } from '@angular/core';
-import { IBlogEntry } from '../models/blog-entry';
+import { IBlogEntry, IBlogEntryDto } from '../models/blog-entry';
 import { Observable, of, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
+  private apiUrl = 'http://127.0.0.1:8000'
   posts : IBlogEntry[] = [];
-
-  constructor() { 
-    this.getBlogEntryList();
+  
+  constructor(private http: HttpClient) {    
+    this.getPosts(10).subscribe(p => this.posts = p);    
   }
 
-  getPosts(): Observable<IBlogEntry[]> {
-    return of(this.posts);
+  getPosts(num_posts: number): Observable<IBlogEntry[]> {
+     const theUrl = `${this.apiUrl}/posts?num_posts=${num_posts}&featured=false`
+    return this.http.get<IBlogEntryDto[]>(theUrl)
+      .pipe(map(dtos => dtos.map(this.mapBlogEntry)));
   }
 
-  getPostById(id: number): Observable<IBlogEntry | undefined> {
-    return of(this.posts.find(i => i.id === id));
+  getPostById(id: string): Observable<IBlogEntry | undefined> {
+    return of(this.posts.find(i => i.postId === id));
   }
 
   getLatestPost(): Observable<IBlogEntry | undefined> {
     return this.sortBlogPosts().pipe(
       map(items => items?.[0])
     );
+  }
+
+  /* example executing multiple maps on a dataset.
+  getLatestPost(): Observable<IBlogEntry | undefined> {
+    const url = "http://127.0.0.1:8000/posts?num_posts=2&featured=false"
+    return this.http.get<IBlogEntryDto[]>(url)
+      .pipe(map(dtos => dtos.map(this.mapBlogEntry)),map(posts => posts[0]));
+  }
+  */
+
+  mapBlogEntry(dto: IBlogEntryDto): IBlogEntry {
+    return {
+      postId: dto.postId,
+      title: dto.title,
+      imageUrl: dto.imageUrl,
+      imageAltText: dto.imageAltText,
+      blogText: dto.blogText,
+      postDate: new Date(dto.postDate),
+      featured: dto.featured === '1'
+    };
   }
 
   //the About Me Post is going to be the FIRST post into the system...this will eventually be a problem.
@@ -47,7 +71,7 @@ export class BlogService {
   getBlogEntryList(){
     this.posts = [
       {
-        id: 1,
+        postId: "1",
         title: "My First Blog Post",
         imageUrl: "/assets/images/FeelsTheCat.jpg",
         imageAltText: "Feels The Cat",
@@ -55,7 +79,7 @@ export class BlogService {
         postDate: new Date(2026, 1, 31),
         featured: false},
       {
-        id: 2,
+        postId: "2",
         title: "Learning Python",
         imageUrl: "/assets/images/PythonLogo.png",
         imageAltText: "Official Python Logo",
@@ -64,7 +88,7 @@ export class BlogService {
         featured: true
       },
       {
-        id: 3,
+        postId: "3",
         title: "Learning Angular",
         imageUrl: "/assets/images/AngularLogo.png",
         imageAltText: "Angular Logo",
@@ -73,7 +97,7 @@ export class BlogService {
         featured: true
       },
       {
-        id: 4,
+        postId: "4",
         title: "About Me",
         imageUrl: "",
         imageAltText: "none",

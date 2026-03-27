@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./blog-entry.component.css']
 })
 export class BlogEntryComponent {
-  @Input() blogEntryId! : number;
+  @Input() blogEntryId! : string;
   entry$! : Observable<IBlogEntry | undefined>;
   
   constructor( private blogSvc : BlogService ) {  }
