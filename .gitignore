@@ -52,3 +52,12 @@ htmlcov/
 
 #module installs
 *.egg-info/
+
+# =========================
+# Terraform
+# =========================
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+

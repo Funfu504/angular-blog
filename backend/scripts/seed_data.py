@@ -1,5 +1,10 @@
 import boto3
 
+#uncomment this and comment below to leverage script to write data to AWS Cloud.
+#current state will push data to local docker instance.
+#session = boto3.Session(profile_name='terraform', region_name='us-east-1')
+#dynamodb = session.resource('dynamodb')
+
 dynamodb = boto3.resource(
     "dynamodb",
     endpoint_url="http://localhost:8000",
