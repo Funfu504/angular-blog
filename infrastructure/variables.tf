@@ -15,3 +15,13 @@ variable "table_name" {
   type        = string
   default     = "Blog_Post"
 }
+
+variable "environment" {
+  type        = string
+  default     = "dev"
+}
+
+variable "app_name" {
+  type        = string
+  default     = "Blog"
+}

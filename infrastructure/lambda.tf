@@ -1,6 +1,5 @@
 resource "aws_lambda_function" "get_posts" {
-  function_name = "get_posts"
-
+  function_name    = "get_posts"
   runtime          = "python3.13"
   handler          = "lambda_read_posts.handler"
   timeout          = 10  # seconds
@@ -11,4 +10,6 @@ resource "aws_lambda_function" "get_posts" {
   #in this terraform lambda file because AWS defaults to the dynamo db instance present in the region during runtime.
 
   role = aws_iam_role.lambda_exec.arn
+
+  tags = local.common_tags
 }

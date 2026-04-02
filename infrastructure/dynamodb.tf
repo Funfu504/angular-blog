@@ -1,7 +1,7 @@
 resource "aws_dynamodb_table" "blog_table" {
   name         = var.table_name
   billing_mode = "PAY_PER_REQUEST"
-
+  
   hash_key  = "Post_Id"
   range_key = "Post_Element_Type"
 
@@ -41,8 +41,5 @@ resource "aws_dynamodb_table" "blog_table" {
     projection_type = "ALL"
   }
 
-  tags = {
-    Environment = "dev"
-    Project     = "blog"
-  }
+  tags = local.common_tags
 }
