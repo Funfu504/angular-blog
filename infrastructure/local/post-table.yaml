@@ -15,7 +15,7 @@ KeySchema:
   - AttributeName: Post_Element_Type
     KeyType: RANGE 
 GlobalSecondaryIndexes:
-  - IndexName: PostsByPostDate
+  - IndexName: GSI_PostsByPostDate
     KeySchema:
       - AttributeName: Post_Element_Type
         KeyType: HASH
@@ -23,7 +23,7 @@ GlobalSecondaryIndexes:
         KeyType: RANGE
     Projection:
       ProjectionType: ALL
-  - IndexName: PostsByFeaturePostDate
+  - IndexName: GSI_PostsByFeaturePostDate
     KeySchema:
       - AttributeName: Post_Element_Type
         KeyType: HASH

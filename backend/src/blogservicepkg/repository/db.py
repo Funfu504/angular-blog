@@ -39,7 +39,7 @@ def get_posts(post_element_type: str, limit: int) -> list[str] :
     table = get_post_table()
     
     response = table.query(
-        IndexName="PostsByPostDate",
+        IndexName="GSI_PostsByPostDate",
         KeyConditionExpression=Key("Post_Element_Type").eq(post_element_type),
         ScanIndexForward=False,
         Limit=limit
@@ -57,7 +57,7 @@ def get_featured_posts(post_element_type: str, limit: int) -> list[str] :
     table = get_post_table()
     
     response = table.query(
-        IndexName="PostsByFeaturePostDate",
+        IndexName="GSI_PostsByFeaturePostDate",
         KeyConditionExpression=Key("Post_Element_Type").eq(post_element_type) 
             & Key("Featured_Post_Date").begins_with("1"),
         ScanIndexForward=False,

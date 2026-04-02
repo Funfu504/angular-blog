@@ -1,0 +1,4 @@
+# backend/lambda-requirements.txt
+python-dotenv
+boto3==1.42.56
+pydantic==2.12.5
