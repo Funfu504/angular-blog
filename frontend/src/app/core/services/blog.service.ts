@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { IBlogEntry, IBlogEntryDto } from '../models/blog-entry';
 import { Observable, of, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from "../environments/environments"
+import { ApiPaths } from "../enums/api-paths"
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class BlogService {
   }
 
   getPosts(num_posts: number): Observable<IBlogEntry[]> {
-     const theUrl = `${this.apiUrl}/posts?num_posts=${num_posts}&featured=false`
+     const theUrl = `${environment.baseUrl}${ApiPaths.Posts}?num_posts=${num_posts}&featured=false`
     return this.http.get<IBlogEntryDto[]>(theUrl)
       .pipe(map(dtos => dtos.map(this.mapBlogEntry)));
   }
