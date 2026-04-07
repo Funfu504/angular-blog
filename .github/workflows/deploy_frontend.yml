@@ -32,14 +32,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Debug location
-        run: |
-            pwd
-            ls -R
-
       - name: Inject API URL
         run: |
-            sed -i 's|__API_URL__|${{ secrets.API_URL }}|g' frontend/src/app/core/environments/environments.ts
+            sed -i 's|__API_URL__|${{ secrets.API_URL }}|g' src/app/core/environments/environments.ts
 
       - name: Build Angular app
         run: npm run build -- --configuration production
