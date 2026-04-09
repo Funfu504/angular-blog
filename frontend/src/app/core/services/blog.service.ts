@@ -2,14 +2,13 @@ import { Injectable } from '@angular/core';
 import { IBlogEntry, IBlogEntryDto } from '../models/blog-entry';
 import { Observable, of, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from "../environments/environments"
+import { environment } from "../environments/environment"
 import { ApiPaths } from "../enums/api-paths"
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
-  private apiUrl = 'http://127.0.0.1:8000'
   posts : IBlogEntry[] = [];
   
   constructor(private http: HttpClient) {    
