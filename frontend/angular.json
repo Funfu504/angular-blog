@@ -33,8 +33,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "app/core/environments/environment.ts",
-                  "with": "app/core/environments/environment.prod.ts"
+                  "replace": "src/app/core/environments/environment.ts",
+                  "with": "src/app/core/environments/environment.prod.ts"
                 }
               ],
               "budgets": [
@@ -54,8 +54,8 @@
             "development": {
               "fileReplacements": [
                 {
-                  "replace": "app/core/environments/environment.ts",
-                  "with": "app/core/environments/environment.dev.ts"
+                  "replace": "src/app/core/environments/environment.ts",
+                  "with": "src/app/core/environments/environment.dev.ts"
                 }                
               ],
               "buildOptimizer": false,
