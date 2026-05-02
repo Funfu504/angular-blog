@@ -23,5 +23,5 @@ export class AuthService {
     `&response_type=code` +
     `&scope=openid+email+profile` +
     `&redirect_uri=${redirectUri}`;
-}
+  }
 }

@@ -16,3 +16,12 @@
 .left * {
   margin-right: 25px;
 }
+
+.right {
+  display: flex;
+  align-items: right;
+}
+
+.right * {
+  margin-right: 25px;
+}

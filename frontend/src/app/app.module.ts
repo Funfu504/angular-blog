@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -9,8 +9,9 @@ import { BlogEntryPreviewComponent } from './pages/blog-entry-preview/blog-entry
 import { SiteHeaderComponent } from './pages/site-header/site-header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AboutComponent } from './pages/about/about.component';
-import { CallbackComponent } from './pages/auth/callback/callback.component';
-import { AuthcallbackComponent } from './pages/auth/auth-callback.component';
+import { AuthCallbackComponent } from './pages/auth/auth-callback.component';
+import { LoginComponent } from './pages/login/login.component';
+import { AuthInterceptor } from './core/auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -20,15 +21,23 @@ import { AuthcallbackComponent } from './pages/auth/auth-callback.component';
     BlogEntryPreviewComponent,
     SiteHeaderComponent,
     AboutComponent,
-    CallbackComponent,
-    AuthcallbackComponent
+    AuthCallbackComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+
+}
