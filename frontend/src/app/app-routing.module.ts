@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';
-import { AuthCallbackComponent } from './pages/auth/auth-callback.component';
+import { AuthCallbackComponent } from './core/auth/callback/auth-callback.component';
 
 const routes: Routes = [
   {path: "home", component: HomeComponent, title: "Home - Moe's Blog"},

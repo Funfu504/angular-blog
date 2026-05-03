@@ -9,8 +9,8 @@ import { BlogEntryPreviewComponent } from './pages/blog-entry-preview/blog-entry
 import { SiteHeaderComponent } from './pages/site-header/site-header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AboutComponent } from './pages/about/about.component';
-import { AuthCallbackComponent } from './pages/auth/auth-callback.component';
-import { LoginComponent } from './pages/login/login.component';
+import { AuthCallbackComponent } from './core/auth/callback/auth-callback.component';
+import { LoginComponent } from './core/auth/login/login.component';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 
 @NgModule({

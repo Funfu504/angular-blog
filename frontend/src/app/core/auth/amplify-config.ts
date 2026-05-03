@@ -1,6 +1,6 @@
 import { Amplify } from 'aws-amplify';
 
-import { environment } from '../environments/environment';
+import { environment } from 'src/environments/environment';
 
 export function initAmplify() {
     console.log("AMPLIFY INIT CALLED");

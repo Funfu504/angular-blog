@@ -3,7 +3,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
 import { Observable, from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { fetchAuthSession } from 'aws-amplify/auth';
-import { environment } from '../environments/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -19,10 +19,10 @@ export class AuthInterceptor implements HttpInterceptor {
     /*
       Only attach token to YOUR backend API calls.
       Skip external URLs.
-    
+    */
     if (!req.url.startsWith(environment.baseUrl)) {
       return next.handle(req);
-    }*/
+    }
 
     /*
       fetchAuthSession() is async, so we convert
