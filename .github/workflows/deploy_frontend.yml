@@ -34,7 +34,7 @@ jobs:
 
       - name: Inject API URL
         run: |
-            sed -i 's|__API_URL__|${{ secrets.API_URL }}|g' src/app/core/environments/environment.dev.ts
+            sed -i 's|__API_URL__|${{ secrets.API_URL }}|g' src/environments/environment.dev.ts
 
       - name: Build Angular app
         run: npm run build -- --configuration development

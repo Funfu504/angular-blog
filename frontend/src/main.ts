@@ -1,7 +1,7 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 
-import { initAmplify } from './app/core/auth/amplify-config';
+import { initAmplify } from './core/auth/amplify-config';
 
 initAmplify();
 
