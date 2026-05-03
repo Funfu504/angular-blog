@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { IBlogEntry } from 'src/app/models/blog-entry';
-import { BlogService } from 'src/app/service/blog.service';
+import { BlogService } from 'src/app/services/blog.service';
 import { Observable } from 'rxjs';
 
 @Component({
