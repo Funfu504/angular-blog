@@ -2,3 +2,4 @@
 python-dotenv
 boto3==1.42.56
 pydantic==2.12.5
+python-ulid==3.1.0

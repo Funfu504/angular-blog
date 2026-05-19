@@ -16,6 +16,17 @@ resource "aws_apigatewayv2_integration" "lambda" {
 
   integration_type = "AWS_PROXY"
   integration_uri  = aws_lambda_function.get_posts.invoke_arn
+
+  payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_integration" "create_post_lambda" {
+  api_id = aws_apigatewayv2_api.api.id
+
+  integration_type = "AWS_PROXY"
+  integration_uri  = aws_lambda_function.create_post.invoke_arn
+
+  payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_route" "get_posts" {
@@ -25,6 +36,18 @@ resource "aws_apigatewayv2_route" "get_posts" {
 
   authorization_type = "JWT"
   authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "create_post" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "POST /post"
+  target = "integrations/${aws_apigatewayv2_integration.create_post_lambda.id}"
+}
+
+resource "aws_apigatewayv2_route" "upload_url" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "POST /assets/upload-url"
+  target = "integrations/${aws_apigatewayv2_integration.create_post_lambda.id}"
 }
 
 resource "aws_apigatewayv2_authorizer" "cognito" {
@@ -50,6 +73,15 @@ resource "aws_lambda_permission" "api_gw" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.get_posts.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "api_gw_create_post" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.create_post.function_name
   principal     = "apigateway.amazonaws.com"
 
   source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*"

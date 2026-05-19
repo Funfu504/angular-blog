@@ -1,28 +1,16 @@
-from blogservicepkg.service.services import readFeaturedBlogPosts, readBlogPost, readAllBlogPosts
+from blogservicepkg.service.services import readFeaturedBlogPosts, readBlogPost, readAllBlogPosts, createBlogPost
+from blogservicepkg.service.apimapper import PostAPIMapper
 from blogservicepkg.model.blogpost import BlogPost
+from blogservicepkg.model.post import CreatePostRequest, UploadRequest, UploadResponse
+from blogservicepkg.service.uploads import GenerateS3UploadURL
+import logging
 
-#function to convert the fragmented database records associated to a blog post into a single JSON response.
-def build_post_response(item : BlogPost) -> dict:
-    if not item:
-        return None
-
-    post = {
-        "postId": item.postId,
-        "title": item.metadata.title,
-        "summary": item.metadata.summary,
-        "blogText": item.content.blogtext,
-        "imageUrl": item.images[0].imageUrl,
-        "imageAltText": item.images[0].altText,
-        "postDate": item.postDate,
-        "featured": item.featured
-    }
-
-    return post
+logger = logging.getLogger(__name__)
 
 #retrieves a single post tied to a Post Id.
 def readPost(postId : str) -> dict :
     theBlogPost = readBlogPost(postId)
-    thePost = build_post_response(theBlogPost)
+    thePost = PostAPIMapper.build_post_response(theBlogPost)
     return thePost
 
 #retrieves a defined number of featured posts.
@@ -30,16 +18,25 @@ def readFeaturedPosts(numPosts : int) -> list[dict] :
     listBlogPosts = readFeaturedBlogPosts(numPosts)
     listPosts : list[dict] = []
     for blogPost in listBlogPosts:
-        listPosts.append(build_post_response(blogPost))
+        listPosts.append(PostAPIMapper.build_post_response(blogPost))
 
     return listPosts
 
 #retrieves a defined number of featured posts.
 def readBlogPosts(numPosts : int) -> list[dict] :
+    logger.info(f"Fetching {numPosts} posts")
     listBlogPosts = readAllBlogPosts(numPosts)
     listPosts : list[dict] = []
     for blogPost in listBlogPosts:
-        listPosts.append(build_post_response(blogPost))
+        listPosts.append(PostAPIMapper.build_post_response(blogPost))
 
     return listPosts
+
+def createPost(post : CreatePostRequest):
+    logger.info("Saving new post tited: %s", post.title)
+    createBlogPost(PostAPIMapper.build_post_create(post))
+    
+def generateS3UploadUrl(item: UploadRequest) -> UploadResponse:
+    return GenerateS3UploadURL(item) 
+    
     

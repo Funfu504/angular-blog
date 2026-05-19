@@ -1,5 +1,12 @@
 from blogservicepkg.service.handlers import readPost, readFeaturedPosts, readBlogPosts
 import json
+from core.logging import setup_logging
+from core.transport.response import success_response, failure_response
+import logging
+
+setup_logging()
+
+logger = logging.getLogger(__name__)
 
 def handler(event, context):
     try:
@@ -13,13 +20,8 @@ def handler(event, context):
             num_posts = event["num_posts"]
 
         result = readBlogPosts(int(num_posts))
-    
-        return {
-            "statusCode": 200,
-            "body": json.dumps(result)
-        }
+        return success_response(result)
+
     except Exception as e:
-        return {
-            "statusCode": 500,
-            "body": json.dumps({"error": str(e)})
-        }
+        logger.exception(f"Error reading item: {repr(e)}")
+        return failure_response({"error": str(e)}, 500)

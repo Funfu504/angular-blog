@@ -3,7 +3,10 @@ from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 from blogservicepkg.config import settings
 from blogservicepkg.model.blogpost import BlogPost
-import json
+from blogservicepkg.repository.dbmapper import PostDBMapper
+import logging
+
+logger = logging.getLogger(__name__)
 
 #function initializes the connection to the DynamoDB instance for the Blog App.
 def get_dynamodb():
@@ -16,7 +19,7 @@ def get_dynamodb():
             )
         return boto3.resource("dynamodb")
     except ClientError as e:
-        print(f"Error reading item: {e.response['Error']['Message']}")
+        logger.error(f"Error reading item: {e.response['Error']['Message']}")
         raise
 
 #function returns a handle to the DynamoDB Blog_Post table.
@@ -74,35 +77,14 @@ def put_post(items: list[dict]):
     for item in items:
         response = table.put_item(Item=item)
 
-#function to convert the fragmented database records associated to a blog post into a BlogPost domain entity.
-def build_post_entity(items: list[dict]) -> BlogPost:
-    if not items:
-        return None
-    
-    post = BlogPost(items[0]["Post_Id"])
-
-    # for each element, identify what type of element it is, convert the type's Value collection into
-    # a json object and map the contents as appropriate.
-    for item in items:
-        element_type = item["Post_Element_Type"]
-        value_element = json.loads(item.get("Value"))        
-
-        if element_type == "METADATA":
-            post.addMetadata(value_element.get("title"), value_element.get("summary"))            
-            featured, postDate = item["Featured_Post_Date"].split("#", 1)
-            post.addPostDate(postDate)
-            post.addFeaturedFlag(featured)
-        elif element_type == "CONTENT":
-            post.addContent(value_element.get("blogtext"))            
-        elif element_type == "IMAGE":
-            post.addImage(value_element.get("url"), value_element.get("alttext"))
-
-    return post
+def putBlogPost(post: BlogPost):
+    theDBRecordList = PostDBMapper.build_dynamoDb_entries(post)
+    put_post(theDBRecordList)
 
 #fetch a post based on the post id from the database and return the domain entity.
 def getBlogPost(post_id: str) -> BlogPost:
     thePost = get_post(post_id)
-    return build_post_entity(thePost)
+    return PostDBMapper.build_post_entity(thePost)
 
 #fetch a list of featured posts from the database and return the list as domain entities.
 def getFeaturedBlogPosts(numPosts: int) -> list[BlogPost]:

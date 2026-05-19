@@ -54,6 +54,9 @@ htmlcov/
 #module installs
 *.egg-info/
 
+/backend/readme.md
+/infrastructure/local/readme.md
+
 # =========================
 # Terraform
 # =========================

@@ -47,7 +47,7 @@ class BlogPost:
     postDate = None
     featured = None
 
-    def __init__(self, postId : str):
+    def __init__(self, postId : str,):
         self.postId = postId
         
     def addPostDate(self, postDate : str):
@@ -64,4 +64,7 @@ class BlogPost:
 
     def addImage(self, imageUrl: str, altText: str):
         self.images.append(Image(imageUrl, altText))
+    
+
+
     
