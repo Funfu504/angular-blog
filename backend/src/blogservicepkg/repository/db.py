@@ -15,6 +15,8 @@ def get_dynamodb():
             return boto3.resource(
                 settings.DB,
                 endpoint_url=settings.DYNAMODB_ENDPOINT,
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,                
                 region_name=settings.AWS_REGION
             )
         return boto3.resource("dynamodb")
@@ -79,6 +81,7 @@ def put_post(items: list[dict]):
 
 def putBlogPost(post: BlogPost):
     theDBRecordList = PostDBMapper.build_dynamoDb_entries(post)
+    logger.info("image url: %s", post.images[0].imageUrl)
     put_post(theDBRecordList)
 
 #fetch a post based on the post id from the database and return the domain entity.

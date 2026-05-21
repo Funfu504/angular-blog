@@ -1,6 +1,9 @@
 import json
 from blogservicepkg.model.blogpost import BlogPost
 from ulid import ULID
+import logging
+
+logger = logging.getLogger(__name__)
 
 class PostDBMapper:
 
@@ -27,6 +30,9 @@ class PostDBMapper:
                 post.addContent(value_element.get("blogtext"))            
             elif element_type == "IMAGE":
                 post.addImage(value_element.get("url"), value_element.get("alttext"))
+
+        logger.info("Number of Images: %s", len(post.images))
+        logger.info("Image: %s", post.images[0].altText)
 
         return post
 

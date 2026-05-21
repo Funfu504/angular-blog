@@ -1,11 +1,12 @@
 #FastAPI endpoint
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from blogservicepkg.service.handlers import readPost, readFeaturedPosts, readBlogPosts, createPost, generateS3UploadUrl
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest
 from core.transport.response import success_response, failure_response
 from fastapi.middleware.cors import CORSMiddleware
 from core.logging import setup_logging
 import logging
+import json
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -47,16 +48,22 @@ def read_post(post_id: str | None = None):
 def save_post(request: CreatePostRequest):
     try:        
         createPost(request)
-        return success_response(request.model_dump())    
+        return request
     except Exception as e:
         logger.exception(f"Error reading item: {repr(e)}")
-        return failure_response({"exception": str(e)}, 500)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal Server Error"
+        )
 
 @app.post("/assets/upload-url")
 def generate_S3_upload_url(request: UploadRequest):
     try:
         response = generateS3UploadUrl(request)
-        success_response(response.model_dump())
+        return response
     except Exception as e:
         logger.exception(f"Error reading item: {repr(e)}")
-        return failure_response({"exception": str(e)}, 500)    
+        raise HTTPException(
+            status_code=500,
+            detail=f"Internal Server Error"
+        )  

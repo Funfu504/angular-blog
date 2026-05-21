@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  baseUrl: 'https://pytw9la54d.execute-api.us-east-1.amazonaws.com',
+  baseUrl: 'http://127.0.0.1:8000',
   
   cognito: {
     userPoolId: 'us-east-1_6xapZLAa2',

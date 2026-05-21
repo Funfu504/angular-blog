@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IBlogEntry, IBlogEntryDto } from '../models/blog-entry';
-import { Observable, of, map } from 'rxjs';
+import { IBlogEntry, IBlogEntryDto, IUploadRequest, IUploadResponseDto, ICreateBlogEntry } from '../models/blog-entry';
+import { Observable, of, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "src/environments/environment"
 import { ApiPaths } from "../enums/api-paths"
+import { NONE_TYPE } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,7 @@ export class BlogService {
       imageUrl: dto.imageUrl,
       imageAltText: dto.imageAltText,
       blogText: dto.blogText,
+      summary: dto.summary,
       postDate: new Date(dto.postDate),
       featured: dto.featured === '1'
     };
@@ -69,6 +71,49 @@ export class BlogService {
     return of(this.posts.sort((a, b) => b.postDate.getTime() - a.postDate.getTime()))
   }
 
+  createBlogPost(post: ICreateBlogEntry, file: FormData): Observable<IBlogEntry | undefined> {
+    
+    const theGenImageUploadUrl = `${environment.baseUrl}${ApiPaths.GenUploadUrl}`
+    const theCreatePostUrl = `${environment.baseUrl}${ApiPaths.CreatePost}`
+    debugger;
+    const imageRequest: IUploadRequest = {
+      "userId": "Moe",
+      "filename": (file.get("fileName") as string),
+      "contentType": (file.get("contentType") as string)
+    }
+
+    //first generate the S3 upload url
+    return this.http.post<IUploadResponseDto>(theGenImageUploadUrl, imageRequest)
+    .pipe( //next post the image to S3.
+      switchMap
+      ((genUrlUploadResponse) => 
+        { 
+          post.imageUrl = genUrlUploadResponse.fileKey
+          return this.http.put(
+            genUrlUploadResponse.uploadUrl, 
+            file.get("thumbnail"), 
+            {
+              headers: {
+                'Content-Type': (file.get("contentType") as string)
+              }
+            }
+          ).pipe( //finally save the post to the backend.
+            switchMap
+            (() => 
+              {
+                console.log("Final DB Update")
+                console.log("THE URL", theCreatePostUrl)
+                console.log("THE CONTENT", post)
+                return this.http.post<IBlogEntryDto>(theCreatePostUrl, post)
+                .pipe(map(dto => this.mapBlogEntry(dto)))
+              }
+            )
+          )
+        }
+      )
+    );    
+  }
+
   getBlogEntryList(){
     this.posts = [
       {
@@ -77,6 +122,7 @@ export class BlogService {
         imageUrl: "/assets/images/FeelsTheCat.jpg",
         imageAltText: "Feels The Cat",
         blogText: "Wall of Text",
+        summary: "summary",
         postDate: new Date(2026, 1, 31),
         featured: false},
       {
@@ -85,6 +131,7 @@ export class BlogService {
         imageUrl: "/assets/images/PythonLogo.png",
         imageAltText: "Official Python Logo",
         blogText: "Wall of Text",
+        summary: "summary",        
         postDate: new Date(2026, 1, 30),
         featured: true
       },
@@ -94,6 +141,7 @@ export class BlogService {
         imageUrl: "/assets/images/AngularLogo.png",
         imageAltText: "Angular Logo",
         blogText: "Wall of Text",
+        summary: "summary",        
         postDate: new Date(2026, 1, 29),
         featured: true
       },
@@ -103,6 +151,7 @@ export class BlogService {
         imageUrl: "",
         imageAltText: "none",
         blogText: "I am the owner of this blog.",
+        summary: "summary",
         postDate: new Date(2026, 1, 1),
         featured: false
       }      

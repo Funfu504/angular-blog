@@ -1,5 +1,6 @@
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -12,6 +13,8 @@ import { AboutComponent } from './pages/about/about.component';
 import { AuthCallbackComponent } from 'src/core/auth/pages/callback/auth-callback.component';
 import { LoginComponent } from 'src/core/auth/pages/login/login.component';
 import { AuthInterceptor } from 'src/core/auth/auth.interceptor';
+import { BlogEntryCreateComponent } from './pages/blog-entry-create/blog-entry-create.component';
+import { HttpClientXsrfModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,12 +25,15 @@ import { AuthInterceptor } from 'src/core/auth/auth.interceptor';
     SiteHeaderComponent,
     AboutComponent,
     AuthCallbackComponent,
-    LoginComponent
+    LoginComponent,
+    BlogEntryCreateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    HttpClientXsrfModule.disable()
   ],
   providers: [
     {

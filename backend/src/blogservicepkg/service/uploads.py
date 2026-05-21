@@ -25,6 +25,7 @@ def get_s3():
 def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
 
     logger.info("GeneratingS3UploadURL")
+    logger.info(settings.AWS_ACCESS_KEY_ID)  
 
     try:
         url = get_s3().generate_presigned_url(

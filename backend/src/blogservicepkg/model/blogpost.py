@@ -43,12 +43,13 @@ class BlogPost:
     postId = None    
     metadata = None
     content = None    
-    images: list[Image] = []
+    images: list[Image] = None
     postDate = None
     featured = None
 
     def __init__(self, postId : str,):
         self.postId = postId
+        self.images = []
         
     def addPostDate(self, postDate : str):
         self.postDate = postDate
