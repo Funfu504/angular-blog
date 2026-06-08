@@ -31,7 +31,7 @@ def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
             "put_object",
             Params={
                 "Bucket": settings.ASSETS_BUCKET,
-                "Key": f"/users/{item.userId}/{item.filename}",
+                "Key": f"users/{item.userId}/{item.filename}",
                 "ContentType": item.contentType
             },
             ExpiresIn=300
@@ -40,7 +40,7 @@ def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
         logger.exception(f"Error generating presigned url for S3: {repr(e)}")
         raise
 
-    response = UploadResponse(uploadUrl=url, fileKey=f"/users/{item.userId}/{item.filename}")
+    response = UploadResponse(uploadUrl=url, fileKey=f"users/{item.userId}/{item.filename}")
 
     return response
 

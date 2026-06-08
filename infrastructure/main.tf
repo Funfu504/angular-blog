@@ -21,6 +21,7 @@ module "s3" {
   tags = local.common_tags
 
   cloudfront_distribution_assets_arn = module.cloudfront.cloudfront_distribution_assets_arn
+  cloudfront_distribution_code_domain = "https://d3ecwobg2ch99d.cloudfront.net"
 }
 
 module "cloudfront" {

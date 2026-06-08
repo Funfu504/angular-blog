@@ -41,6 +41,30 @@ resource "aws_s3_bucket_ownership_controls" "assets" {
   }
 }
 
+resource "aws_s3_bucket_cors_configuration" "assets" {
+  bucket = aws_s3_bucket.assets.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+
+    allowed_methods = [
+      "GET",
+      "HEAD",
+      "PUT"
+    ]
+
+    allowed_origins = [
+      var.cloudfront_distribution_code_domain, "http://localhost:4200"
+    ]
+
+    expose_headers = [
+      "ETag"
+    ]
+
+    max_age_seconds = 3000
+  }
+}
+
 resource "aws_s3_bucket_policy" "assets" {
   bucket = aws_s3_bucket.assets.id
 

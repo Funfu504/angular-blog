@@ -15,7 +15,7 @@ export const environment = {
   },
 
   cdn: {
-    baseUrl: 'https://d13mzq1sh07lnq.cloudfront.net',
+    baseUrl: 'https://d13mzq1sh07lnq.cloudfront.net/',
   }
 
 };
