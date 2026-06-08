@@ -2,7 +2,6 @@ import boto3
 import logging
 from blogservicepkg.model.post import UploadRequest, UploadResponse
 from blogservicepkg.config import settings
-from botocore.exceptions import ClientError
 
 logger = logging.getLogger(__name__)
 
@@ -11,8 +10,8 @@ def get_s3():
     try:    
         if settings.USE_LOCAL:
             return boto3.client(
-                settings.S3,
-                endpoint_url=settings.S3_ENDPOINT,
+                settings.BUCKET_STORAGE,
+                endpoint_url=settings.BUCKET_STORAGE_ENDPOINT,
                 aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,                
                 region_name=settings.AWS_REGION
@@ -31,8 +30,8 @@ def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
         url = get_s3().generate_presigned_url(
             "put_object",
             Params={
-                "Bucket": "angular-blog-dev-assets",
-                "Key": f"users/{item.userId}/{item.filename}",
+                "Bucket": settings.ASSETS_BUCKET,
+                "Key": f"/users/{item.userId}/{item.filename}",
                 "ContentType": item.contentType
             },
             ExpiresIn=300
@@ -41,7 +40,7 @@ def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
         logger.exception(f"Error generating presigned url for S3: {repr(e)}")
         raise
 
-    response = UploadResponse(uploadUrl=url, fileKey=f"users/{item.userId}/{item.filename}")
+    response = UploadResponse(uploadUrl=url, fileKey=f"/users/{item.userId}/{item.filename}")
 
     return response
 

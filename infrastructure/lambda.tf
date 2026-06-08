@@ -25,6 +25,12 @@ resource "aws_lambda_function" "create_post" {
   #the OS environment variables referenced in the backend/src/blogservicepkg/repository/config.py file are not overwritten
   #in this terraform lambda file because AWS defaults to the dynamo db instance present in the region during runtime.
 
+  environment {
+    variables = {
+      ASSETS_BUCKET    = "blog-dev-assets"
+    }
+  }
+
   role = aws_iam_role.create_post_lambda.arn
 
   tags = local.common_tags

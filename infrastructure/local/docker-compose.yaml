@@ -19,6 +19,32 @@ services:
     volumes:
       - minio_data:/data
   
+  dynamodb-init:
+    image: amazon/aws-cli
+    depends_on:
+      - dynamodb
+    volumes:
+      - ./:/workspace    
+    environment:
+      AWS_ACCESS_KEY_ID: admin
+      AWS_SECRET_ACCESS_KEY: password123
+      AWS_DEFAULT_REGION: us-east-1        
+    entrypoint:
+      - /bin/sh 
+      - -c 
+      - |
+        until aws dynamodb list-tables \
+          --endpoint-url http://dynamodb:8000 \
+          --region us-east-1; do
+            echo waiting for dynamodb...
+            sleep 2;
+        done;
+        aws dynamodb create-table \
+        --cli-input-yaml file:///workspace/post-table.yaml \
+        --endpoint-url http://dynamodb:8000 \
+        --region us-east-1;
+      
+
   minio-init:
     image: minio/mc:latest
     depends_on:

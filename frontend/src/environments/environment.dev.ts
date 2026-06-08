@@ -12,5 +12,10 @@ export const environment = {
 
     redirectSignOut: [
       'https://d3ecwobg2ch99d.cloudfront.net']
+  },
+
+  cdn: {
+    baseUrl: 'https://d13mzq1sh07lnq.cloudfront.net',
   }
+
 };

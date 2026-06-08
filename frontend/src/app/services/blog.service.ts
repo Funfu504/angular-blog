@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IBlogEntry, IBlogEntryDto, IUploadRequest, IUploadResponseDto, ICreateBlogEntry } from '../models/blog-entry';
-import { Observable, of, map, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Observable, of, map, switchMap, tap } from 'rxjs';
+import { IBlogEntry, IBlogEntryDto, ICreateBlogEntry } from '../models/blog-entry';
+import { IUploadRequest, IUploadResponseDto } from '../models/asset';
 import { environment } from "src/environments/environment"
 import { ApiPaths } from "../enums/api-paths"
-import { NONE_TYPE } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -13,18 +13,41 @@ export class BlogService {
   posts : IBlogEntry[] = [];
   
   constructor(private http: HttpClient) {    
-    this.getPosts(10).subscribe(p => this.posts = p);    
+    //this.getPosts(10).subscribe(p => this.posts = p);    
   }
 
   getPosts(num_posts: number): Observable<IBlogEntry[]> {
-     const theUrl = `${environment.baseUrl}${ApiPaths.Posts}?num_posts=${num_posts}&featured=false`
-    return this.http.get<IBlogEntryDto[]>(theUrl)
-      .pipe(map(dtos => dtos.map(this.mapBlogEntry)));
+    
+    //debugger;
+    
+    if (this.posts && this.posts.length > 0)
+    {
+      //this.posts[0].imageUrl = "http://localhost:9000/angular-blog-dev-assets/users/Moe/1st%20gravedigger%20down.png";
+      return of(this.posts);
+    }
+    else
+    {    
+      const theUrl = `${environment.baseUrl}${ApiPaths.Posts}?num_posts=${num_posts}&featured=false`
+
+      return this.http.get<IBlogEntryDto[]>(theUrl)
+        .pipe(
+          map(dtos => dtos.map(this.mapBlogEntry)), 
+          tap((posts) => this.posts = posts)
+        );
+    }
   }
 
   getPostById(id: string): Observable<IBlogEntry | undefined> {
+    return this.getPosts(10).pipe(
+      map(getPostResponse => getPostResponse?.find(i => i.postId === id))      
+    );
+  }
+
+  /*
+  getPostById(id: string): Observable<IBlogEntry | undefined> {
     return of(this.posts.find(i => i.postId === id));
   }
+  */
 
   getLatestPost(): Observable<IBlogEntry | undefined> {
     return this.sortBlogPosts().pipe(
@@ -32,19 +55,11 @@ export class BlogService {
     );
   }
 
-  /* example executing multiple maps on a dataset.
-  getLatestPost(): Observable<IBlogEntry | undefined> {
-    const url = "http://127.0.0.1:8000/posts?num_posts=2&featured=false"
-    return this.http.get<IBlogEntryDto[]>(url)
-      .pipe(map(dtos => dtos.map(this.mapBlogEntry)),map(posts => posts[0]));
-  }
-  */
-
   mapBlogEntry(dto: IBlogEntryDto): IBlogEntry {
     return {
       postId: dto.postId,
       title: dto.title,
-      imageUrl: dto.imageUrl,
+      imageUrl: `${environment.cdn.baseUrl}${dto.imageUrl}`,
       imageAltText: dto.imageAltText,
       blogText: dto.blogText,
       summary: dto.summary,
@@ -68,13 +83,19 @@ export class BlogService {
   }
 
   sortBlogPosts(): Observable<IBlogEntry[] | undefined> {
-    return of(this.posts.sort((a, b) => b.postDate.getTime() - a.postDate.getTime()))
+    return this.getPosts(10).pipe(
+      map(getPostResponse => getPostResponse.sort((a, b) => b.postDate.getTime() - a.postDate.getTime()))
+    )
   }
+
+  /*
+  sortBlogPosts(): Observable<IBlogEntry[] | undefined> {
+    return of(this.posts.sort((a, b) => b.postDate.getTime() - a.postDate.getTime()))
+  }*/
 
   createBlogPost(post: ICreateBlogEntry, file: FormData): Observable<IBlogEntry | undefined> {
     
-    const theGenImageUploadUrl = `${environment.baseUrl}${ApiPaths.GenUploadUrl}`
-    const theCreatePostUrl = `${environment.baseUrl}${ApiPaths.CreatePost}`
+    const theGenImageUploadUrl = `${environment.baseUrl}${ApiPaths.GenUploadUrl}`    
     debugger;
     const imageRequest: IUploadRequest = {
       "userId": "Moe",
@@ -85,33 +106,34 @@ export class BlogService {
     //first generate the S3 upload url
     return this.http.post<IUploadResponseDto>(theGenImageUploadUrl, imageRequest)
     .pipe( //next post the image to S3.
-      switchMap
-      ((genUrlUploadResponse) => 
-        { 
-          post.imageUrl = genUrlUploadResponse.fileKey
-          return this.http.put(
-            genUrlUploadResponse.uploadUrl, 
-            file.get("thumbnail"), 
-            {
-              headers: {
-                'Content-Type': (file.get("contentType") as string)
-              }
-            }
-          ).pipe( //finally save the post to the backend.
-            switchMap
-            (() => 
-              {
-                console.log("Final DB Update")
-                console.log("THE URL", theCreatePostUrl)
-                console.log("THE CONTENT", post)
-                return this.http.post<IBlogEntryDto>(theCreatePostUrl, post)
-                .pipe(map(dto => this.mapBlogEntry(dto)))
-              }
-            )
-          )
+      switchMap((genUrlUploadResponse) => this.uploadAsset(genUrlUploadResponse, post, file)),      
+      switchMap(() => this.createPost(post)), //finally save the post to the backend.
+      tap(() => this.posts = [])
+    )
+  }
+
+  private uploadAsset(genUrlUploadResponse: IUploadResponseDto, post: ICreateBlogEntry, file: FormData)
+  {
+    post.imageUrl = genUrlUploadResponse.fileKey
+    return this.http.put(
+      genUrlUploadResponse.uploadUrl, 
+      file.get("thumbnail"), 
+      {
+        headers: {
+          'Content-Type': (file.get("contentType") as string)
         }
-      )
-    );    
+      })
+  }
+
+  private createPost(post: ICreateBlogEntry): Observable<IBlogEntry>
+  {
+    const theCreatePostUrl = `${environment.baseUrl}${ApiPaths.CreatePost}`
+
+    console.log("Final DB Update")
+    console.log("THE URL", theCreatePostUrl)
+    console.log("THE CONTENT", post)
+    return this.http.post<IBlogEntryDto>(theCreatePostUrl, post)
+    .pipe(map(dto => this.mapBlogEntry(dto)))
   }
 
   getBlogEntryList(){

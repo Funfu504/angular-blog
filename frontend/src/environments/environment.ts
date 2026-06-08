@@ -9,7 +9,11 @@ export const environment = {
 
     redirectSignIn: ['http://localhost:4200/auth/callback'],
 
-    redirectSignOut: ['http://localhost:4200']
-  }  
+    redirectSignOut: ['http://localhost:4200'],
+  },
+  
+  cdn: {
+    baseUrl: 'http://localhost:9000/angular-blog-dev-assets',
+  }
   
 };
