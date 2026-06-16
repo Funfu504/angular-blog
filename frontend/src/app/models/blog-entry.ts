@@ -24,6 +24,7 @@ export interface ICreateBlogEntry {
   "title": string,
   "summary": string,
   "blogText": string,
+  "imageFileName": string,
   "imageUrl": string,
   "imageAltText": string,
   "postDate": string,

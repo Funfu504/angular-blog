@@ -24,7 +24,7 @@ class PostAPIMapper:
         post = BlogPost("0")
         post.addMetadata(item.title, item.summary)
         post.addContent(item.blogText)
-        post.addImage(item.imageUrl, item.imageAltText)
+        post.addImage(item.imageFileName, item.imageUrl, item.imageAltText)
         post.addPostDate(item.postDate)
         post.addFeaturedFlag(item.featured)
 
@@ -39,7 +39,7 @@ class PostAPIMapper:
         post = BlogPost(item.postId)
         post.addMetadata(item.title, item.summary)
         post.addContent(item.blogText)
-        post.addImage(item.imageUrl, item.imageAltText)
+        post.addImage(item.imageFileName, item.imageUrl, item.imageAltText)
         post.addPostDate(item.postDate)
         post.addFeaturedFlag(item.featured)
 

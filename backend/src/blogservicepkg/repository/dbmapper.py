@@ -29,7 +29,7 @@ class PostDBMapper:
             elif element_type == "CONTENT":
                 post.addContent(value_element.get("blogtext"))            
             elif element_type == "IMAGE":
-                post.addImage(value_element.get("url"), value_element.get("alttext"))
+                post.addImage(value_element.get("filename"), value_element.get("url"), value_element.get("alttext"))
 
         logger.info("Number of Images: %s", len(post.images))
         logger.info("Image: %s", post.images[0].altText)
@@ -72,6 +72,7 @@ class PostDBMapper:
             "Post_Id": f"POST#{items.postId}",
             "Post_Element_Type": "IMAGE",
             "Value": json.dumps({
+                "filename": items.images[0].fileName,
                 "url": items.images[0].imageUrl,
                 "alttext": items.images[0].altText
             })

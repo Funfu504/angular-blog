@@ -12,6 +12,7 @@ class CreatePostRequest(BaseModel):
     title: str
     summary: str
     blogText: str
+    imageFileName: str
     imageUrl: str
     imageAltText: str
     postDate: str
@@ -30,6 +31,7 @@ class SavePostRequest(BaseModel):
     title: str
     summary: str
     blogText: str
+    imageFileName: str
     imageUrl: str
     imageAltText: str
     postDate: str
@@ -68,6 +70,7 @@ class UploadRequest(BaseModel):
 class UploadResponse(BaseModel):
     uploadUrl: str
     fileKey: str
+    fileName: str
 
 
 

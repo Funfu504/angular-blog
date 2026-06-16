@@ -1,10 +1,10 @@
 <div class="container">
     <input type="file" (change)="onFileSelected($event)">
     <form [formGroup]="theForm" (ngSubmit)="onSubmit()">
-        <input formControlName="image"><br>
-        <input formControlName="title"><br>
-        <textarea formControlName="blogText"></textarea><br>
-        <input formControlName="summary">
+        Blog Entry Image: <input formControlName="image"><br>
+        Blog Entry Title: <input formControlName="title"><br>
+        Blog Entry: <textarea formControlName="blogText"></textarea><br>
+        Blog Entry Summary: <input formControlName="summary">
         <button type="submit" [disabled]="!theForm.valid">Submit</button>    
     </form>    
 </div>

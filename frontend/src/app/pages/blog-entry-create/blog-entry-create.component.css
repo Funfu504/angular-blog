@@ -1,7 +1,7 @@
 .container {
   display: flex;
-  justify-content: center; /* horizontal */
-  flex-direction: column;
+  justify-content: center; /* horizontal */  
+  flex-direction: row;
 }
 
 .centered {

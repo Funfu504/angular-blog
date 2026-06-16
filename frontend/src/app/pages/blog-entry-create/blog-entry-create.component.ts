@@ -49,7 +49,8 @@ export class BlogEntryCreateComponent {
 
     return {
       title: v.title,
-      imageUrl: "",
+      imageFileName: "",
+      imageUrl: "",      
       imageAltText: v.image,
       blogText: v.blogText,
       summary: v.summary,

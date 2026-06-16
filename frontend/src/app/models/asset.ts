@@ -7,4 +7,5 @@ export interface IUploadRequest {
 export interface IUploadResponseDto {
   uploadUrl: string;
   fileKey: string;
+  fileName: string;
 }

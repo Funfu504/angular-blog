@@ -13,7 +13,7 @@ export const environment = {
   },
   
   cdn: {
-    baseUrl: 'http://localhost:9000/angular-blog-dev-assets',
+    baseUrl: 'http://localhost:9000/angular-blog-dev-assets/',
   }
   
 };

@@ -25,10 +25,12 @@ class Content:
 
 class Image:
 
+    fileName = None
     imageUrl = None
-    altText = None
+    altText = None    
 
-    def __init__(self, imageUrl : str, altText : str):
+    def __init__(self, fileName : str, imageUrl : str, altText : str):
+        self.fileName = fileName
         self.imageUrl = imageUrl
         self.altText = altText
 
@@ -36,7 +38,7 @@ class Image:
         self.imageUrl = imageUrl        
 
     def __str__(self):
-        return f"{self.imageUrl} is an image of {self.altText}"
+        return f"{self.imageUrl} is an image of {self.altText}.  It's name is {self.fileName}."
 
 class BlogPost:
 
@@ -63,8 +65,8 @@ class BlogPost:
     def addContent(self, content: str):
         self.content = Content(content)
 
-    def addImage(self, imageUrl: str, altText: str):
-        self.images.append(Image(imageUrl, altText))
+    def addImage(self, fileName: str, imageUrl: str, altText: str):
+        self.images.append(Image(fileName, imageUrl, altText))
     
 
 

@@ -115,6 +115,7 @@ export class BlogService {
   private uploadAsset(genUrlUploadResponse: IUploadResponseDto, post: ICreateBlogEntry, file: FormData)
   {
     post.imageUrl = genUrlUploadResponse.fileKey
+    post.imageFileName = genUrlUploadResponse.fileName
     return this.http.put(
       genUrlUploadResponse.uploadUrl, 
       file.get("thumbnail"), 

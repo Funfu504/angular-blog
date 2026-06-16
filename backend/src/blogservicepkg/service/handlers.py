@@ -34,6 +34,7 @@ def readBlogPosts(numPosts : int) -> list[dict] :
 
 def createPost(post : CreatePostRequest):
     logger.info("Saving new post tited: %s", post.title)
+    logger.info("Saving new post img filename %s", post.imageFileName)
     logger.info("Saving new post img alt text %s", post.imageAltText)
     logger.info("Saving new post img url: %s", post.imageUrl)
     createBlogPost(PostAPIMapper.build_post_create(post))

@@ -12,8 +12,9 @@ def test_build_post_response():
     assert mapping["featured"] == False
 
 def test_build_post_save():
-    post = SavePostRequest(postId= "123", title = "my title", summary = "summary", blogText = "Wall of Text", 
-                           imageAltText= "Alt Text", imageUrl="url", postDate="1/29/2026", featured=False)
+    post = SavePostRequest(postId= "123", title = "my title", summary = "summary", blogText = "Wall of Text",
+                           imageFileName="FileName", imageAltText= "Alt Text", imageUrl="url",
+                           postDate="1/29/2026", featured=False)
     assert post.postId == "123"
     assert post.title == "my title"
     assert post.summary == "summary"

@@ -1,5 +1,6 @@
 import boto3
 import logging
+from ulid import ULID
 from blogservicepkg.model.post import UploadRequest, UploadResponse
 from blogservicepkg.config import settings
 
@@ -24,14 +25,16 @@ def get_s3():
 def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
 
     logger.info("GeneratingS3UploadURL")
-    logger.info(settings.AWS_ACCESS_KEY_ID)  
+    logger.info(settings.AWS_ACCESS_KEY_ID)
+
+    key = f"users/{item.userId}/{str(ULID())}"
 
     try:
         url = get_s3().generate_presigned_url(
             "put_object",
             Params={
                 "Bucket": settings.ASSETS_BUCKET,
-                "Key": f"users/{item.userId}/{item.filename}",
+                "Key": key,
                 "ContentType": item.contentType
             },
             ExpiresIn=300
@@ -40,7 +43,7 @@ def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
         logger.exception(f"Error generating presigned url for S3: {repr(e)}")
         raise
 
-    response = UploadResponse(uploadUrl=url, fileKey=f"users/{item.userId}/{item.filename}")
+    response = UploadResponse(uploadUrl=url, fileKey=key, fileName=item.filename)
 
     return response
 
