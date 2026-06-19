@@ -1,10 +1,27 @@
-<div class="container">
-    <input type="file" (change)="onFileSelected($event)">
-    <form [formGroup]="theForm" (ngSubmit)="onSubmit()">
-        Blog Entry Image: <input formControlName="image"><br>
-        Blog Entry Title: <input formControlName="title"><br>
-        Blog Entry: <textarea formControlName="blogText"></textarea><br>
-        Blog Entry Summary: <input formControlName="summary">
-        <button type="submit" [disabled]="!theForm.valid">Submit</button>    
+<div>
+    <form class="grid" [formGroup]="theForm" (ngSubmit)="onSubmit()">
+        <label>Blog Entry Image:</label>
+        <div>
+            <div *ngIf="imagePreview">
+                <img [src]="imagePreview" /><br>
+            </div>
+            <div>
+                <input formControlName="image" readonly="true">
+                <input type="file" (change)="onFileSelected($event)">
+            </div>
+        </div>
+        <label>Blog Entry Title:</label>
+        <div>
+            <input class="text" formControlName="title" maxlength="25">
+        </div>
+        <label>Blog Entry:</label>
+        <textarea class="textareaLg" formControlName="blogText" maxlength="3000"></textarea>
+        <label>Blog Entry Summary:</label>
+        <textarea class="textareaSm" formControlName="summary" maxlength="100"></textarea>
+        <label>Blog Entry Featured:</label>
+        <input type="checkbox" formControlName="featured">
+        <label>Blog Post Date</label>
+        <input type="date" formControlName="startDate">
+        <button class = "submit" type="submit" [disabled]="!theForm.valid">Submit</button>    
     </form>    
 </div>

@@ -1,15 +1,26 @@
 .container {
   display: flex;
-  justify-content: center; /* horizontal */
   flex-direction: column;
-}
-
-.centered {
-  align-self: center;
+  justify-content: center; /* horizontal */
+  border: 1px solid #0e0101; /* just for visibility */
+  padding: var(--padding-md);
 }
 
 .container img {
   max-width: 300px;
   width: 100%;
   height: auto;
+}
+
+.centered {
+  align-self: center;
+}
+
+.post-title {
+  font-size: var(--font-h1);
+  align-self: center;
+}
+
+.post-body {
+  font-size: var(--font-body);
 }

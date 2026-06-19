@@ -1,11 +1,12 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  height: 30h;
   grid-template-areas:
     "left right";
-  gap: 16px;
+  border: 1px solid #0e0101; /* just for visibility */
+  padding: var(--padding-md);
 }
+
 .left {
   grid-area: left;
 }
@@ -18,4 +19,12 @@
   max-width: 200px;
   width: 100%;
   height: auto;
+}
+
+.post-title {
+  font-size: var(--font-h1);
+}
+
+.post-body {
+  font-size: var(--font-body);
 }

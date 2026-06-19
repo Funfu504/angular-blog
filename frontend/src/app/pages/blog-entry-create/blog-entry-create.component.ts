@@ -3,6 +3,8 @@ import { IBlogEntry, ICreateBlogEntry } from 'src/app/models/blog-entry'
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { BlogService } from 'src/app/services/blog.service';
 import { Observable } from 'rxjs';
+import { formatDate } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog-entry-create',
@@ -14,19 +16,26 @@ export class BlogEntryCreateComponent {
   blogEntry: ICreateBlogEntry | undefined;
   formData: FormData | undefined;
   entry$! : Observable<IBlogEntry | undefined>;
+  imagePreview?: string;
 
-  constructor(private fb: FormBuilder, private blogSvc : BlogService) {
+  constructor(private fb: FormBuilder, private blogSvc : BlogService, private router: Router) {
 
   }
 
-  theForm = this.fb.nonNullable.group({    
-    image: ['', Validators.required],
-    title: ['', Validators.required],		
-    blogText: ['', Validators.required],
-    summary: ['', Validators.required]    
-    });  
+ theForm!: FormGroup; 
 
-  ngOnInit() { }
+  ngOnInit() { 
+    const today = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+    
+    this.theForm = this.fb.nonNullable.group({    
+      image: ['', Validators.required],
+      title: ['', Validators.required],		
+      blogText: ['', Validators.required],
+      summary: ['', Validators.required],
+      postDate: [today, Validators.required],
+      featured: [true, Validators.required]
+    });     
+  }
 
   onFileSelected(event: any) {
     debugger;
@@ -41,6 +50,10 @@ export class BlogEntryCreateComponent {
       this.formData.append("thumbnail", file);
       this.theForm.get('image')?.updateValueAndValidity();
     }
+
+      // store preview separately
+      this.imagePreview = URL.createObjectURL(file);
+
   }
 
   mapFormToCreateRequest(): ICreateBlogEntry {
@@ -54,8 +67,8 @@ export class BlogEntryCreateComponent {
       imageAltText: v.image,
       blogText: v.blogText,
       summary: v.summary,
-      postDate: "05/20/2026",
-      featured: false,
+      postDate: v.postDate,
+      featured: v.featured,
       authorId: "Moe"
     };
   }
@@ -63,6 +76,10 @@ export class BlogEntryCreateComponent {
   onSubmit() {
     
     this.blogEntry = this.mapFormToCreateRequest()    
-    this.blogSvc.createBlogPost(this.blogEntry, (this.formData as FormData)).subscribe()
+    this.blogSvc.createBlogPost(this.blogEntry, (this.formData as FormData)).subscribe({
+    next: () => {
+      this.router.navigate(['/home'], { replaceUrl: true });
+    }
+  })
   }
 }

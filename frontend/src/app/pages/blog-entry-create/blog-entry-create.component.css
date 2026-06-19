@@ -1,15 +1,45 @@
 .container {
   display: flex;
   justify-content: center; /* horizontal */  
-  flex-direction: row;
+  flex-direction: column;
+  border: 5px solid #0e0101; /* just for visibility */
 }
 
-.centered {
-  align-self: center;
-}
-
-.container img {
-  max-width: 300px;
+.grid img {
+  max-width: 200px;
   width: 100%;
   height: auto;
+}
+
+.grid label {
+  text-align: left;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  row-gap: var(--space-md);
+  column-gap: var(--space-lg);
+}
+
+.submit {
+  grid-column: span 2;
+}
+
+.text {
+  width: auto;
+}
+
+.textareaLg {
+  width: 100%;
+  min-height: 300px;
+  padding: var(--padding-md);
+  box-sizing: border-box;
+}
+
+.textareaSm {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--padding-md);
+  box-sizing: border-box;
 }

@@ -1,5 +1,5 @@
 <div class="container" *ngIf="entry$ | async as entry">
-    <p class="centered">{{entry.title}}</p>
+    <p class="post-title">{{entry.title}}</p>
     <img class="centered" src={{entry.imageUrl}} alt={{entry.imageAltText}}>
-    <p>{{entry.blogText}}</p>
+    <p class="post-body">{{entry.blogText}}</p>
 </div>

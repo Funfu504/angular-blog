@@ -5,8 +5,8 @@
   grid-template-areas:
     "left top-right"
     "left bottom-right";
-  height: 90vh;
-  gap: 16px;  
+  row-gap: var(--space-md);
+  column-gap: var(--space-lg);
 }
 
 .left {

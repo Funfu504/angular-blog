@@ -1,7 +1,7 @@
 <div class="grid" *ngIf="entry$ | async as post">
   <div class="left"><img src= {{post.imageUrl}} alt={{post.imageAltText}}></div>
   <div class="right">
-    <p>{{post.title}}</p>
-    <p>{{post.blogText}}</p>
-  </div>  
+    <p class="post-title">{{post.title}}</p>
+    <p class="post-body">{{post.summary}}</p>
+  </div>
 </div>

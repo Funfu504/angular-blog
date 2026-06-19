@@ -6,7 +6,7 @@ export interface IBlogEntryDto {
   imageUrl: string;
   imageAltText: string;
   postDate: string;
-  featured: string;
+  featured: boolean;
 }
 
 export interface IBlogEntry {

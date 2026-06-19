@@ -1,4 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+/* ====================================
+   Design Elements
+   ====================================*/
+
+:root {
+  /* Typography */
+  --font-small: 0.875rem;
+  --font-body: 1rem;
+  --font-h2: 1.5rem;
+  --font-h1: 2rem;
+  --font-display: 2.5rem;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Padding */
+  --padding-xs: 4px;
+  --padding-sm: 8px;
+  --padding-md: 16px;
+  --padding-lg: 24px;
+  --padding-xl: 32px;
+}
+
+/* ====================================
+   Global Elements
+   ====================================*/
+
 body {
   background-color: #F4F7F4;
 }

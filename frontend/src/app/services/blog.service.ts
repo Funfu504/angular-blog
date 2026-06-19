@@ -21,8 +21,7 @@ export class BlogService {
     //debugger;
     
     if (this.posts && this.posts.length > 0)
-    {
-      //this.posts[0].imageUrl = "http://localhost:9000/angular-blog-dev-assets/users/Moe/1st%20gravedigger%20down.png";
+    {      
       return of(this.posts);
     }
     else
@@ -55,7 +54,7 @@ export class BlogService {
     );
   }
 
-  mapBlogEntry(dto: IBlogEntryDto): IBlogEntry {
+  mapBlogEntry(dto: IBlogEntryDto): IBlogEntry { 
     return {
       postId: dto.postId,
       title: dto.title,
@@ -64,7 +63,7 @@ export class BlogService {
       blogText: dto.blogText,
       summary: dto.summary,
       postDate: new Date(dto.postDate),
-      featured: dto.featured === '1'
+      featured: dto.featured
     };
   }
 
@@ -96,7 +95,7 @@ export class BlogService {
   createBlogPost(post: ICreateBlogEntry, file: FormData): Observable<IBlogEntry | undefined> {
     
     const theGenImageUploadUrl = `${environment.baseUrl}${ApiPaths.GenUploadUrl}`    
-    debugger;
+
     const imageRequest: IUploadRequest = {
       "userId": "Moe",
       "filename": (file.get("fileName") as string),
