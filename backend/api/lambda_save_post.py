@@ -1,10 +1,11 @@
 from blogservicepkg.service.handlers import createPost, generateS3UploadUrl
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest, UploadResponse
-from core.transport.request import parse_event_model
+from core.transport.request import parse_event_model, logRequest
 from core.transport.response import success_response, failure_response
 from pydantic import ValidationError
 from core.logging import setup_logging
 import logging
+import json
 
 setup_logging()
 
@@ -25,6 +26,7 @@ def processUploadRequest(event):
 
 def handler(event, context):
     try:
+        logRequest(event)
         route = event["routeKey"]
 
         if (route == "POST /post"):

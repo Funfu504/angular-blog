@@ -33,21 +33,24 @@ resource "aws_apigatewayv2_route" "get_posts" {
   api_id    = aws_apigatewayv2_api.api.id
   route_key = "GET /posts"
   target = "integrations/${aws_apigatewayv2_integration.lambda.id}"
-
-  authorization_type = "JWT"
-  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
 resource "aws_apigatewayv2_route" "create_post" {
   api_id    = aws_apigatewayv2_api.api.id
   route_key = "POST /post"
   target = "integrations/${aws_apigatewayv2_integration.create_post_lambda.id}"
+
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
 resource "aws_apigatewayv2_route" "upload_url" {
   api_id    = aws_apigatewayv2_api.api.id
   route_key = "POST /assets/upload-url"
   target = "integrations/${aws_apigatewayv2_integration.create_post_lambda.id}"
+
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
 resource "aws_apigatewayv2_authorizer" "cognito" {

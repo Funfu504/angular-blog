@@ -14,6 +14,17 @@ resource "aws_lambda_function" "get_posts" {
   tags = local.common_tags
 }
 
+resource "aws_cloudwatch_log_group" "get_posts" {
+  name              = "/aws/lambda/get_posts"
+  retention_in_days = 30
+
+  tags = merge( 
+    local.common_tags,
+    { Function = "get-posts" }
+  )
+
+}
+
 resource "aws_lambda_function" "create_post" {
   function_name    = "create_post"
   runtime          = "python3.13"
@@ -34,4 +45,14 @@ resource "aws_lambda_function" "create_post" {
   role = aws_iam_role.create_post_lambda.arn
 
   tags = local.common_tags
+}
+
+resource "aws_cloudwatch_log_group" "create_post" {
+  name              = "/aws/lambda/create_post"
+  retention_in_days = 30
+
+  tags = merge( 
+    local.common_tags,
+    { Function = "create-post" }
+  )
 }

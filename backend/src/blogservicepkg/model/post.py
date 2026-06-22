@@ -17,7 +17,7 @@ class CreatePostRequest(BaseModel):
     imageAltText: str
     postDate: str
     featured: bool = False
-    authorId: str | None = None
+    userId: str | None = None
 
 class SavePostRequest(BaseModel):
 
@@ -36,7 +36,7 @@ class SavePostRequest(BaseModel):
     imageAltText: str
     postDate: str
     featured: bool = False
-    authorId: str | None = None
+    userId: str | None = None
 
 #BaseModel allows for the entity to be output as json via "model_dump()"
 class GetPostResponse(BaseModel):

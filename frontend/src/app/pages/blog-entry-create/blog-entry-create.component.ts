@@ -69,7 +69,7 @@ export class BlogEntryCreateComponent {
       summary: v.summary,
       postDate: v.postDate,
       featured: v.featured,
-      authorId: "Moe"
+      userId: "Moe"
     };
   }
 

@@ -29,5 +29,5 @@ export interface ICreateBlogEntry {
   "imageAltText": string,
   "postDate": string,
   "featured": boolean,
-  "authorId": string
+  "userId": string
 }
