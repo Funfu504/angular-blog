@@ -1,6 +1,7 @@
 from blogservicepkg.service.handlers import readPost, readFeaturedPosts, readBlogPosts
 import json
 from core.logging import setup_logging
+from core.transport.request import parse_event_model, logRequest
 from core.transport.response import success_response, failure_response
 import logging
 
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 def handler(event, context):
     try:
-        
+        logRequest(event)
         # Check query string first (API Gateway)
         qs = event.get("queryStringParameters", {})
         num_posts = qs.get("num_posts")
