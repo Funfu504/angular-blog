@@ -2,6 +2,7 @@ resource "aws_lambda_function" "get_posts" {
   function_name    = "get_posts"
   runtime          = "python3.13"
   handler          = "lambda_read_posts.handler"
+  memory_size      = 512 # mb
   timeout          = 10  # seconds
   filename         = "../backend/build/lambda_read_posts.zip"
   source_code_hash = filebase64sha256("../backend/build/lambda_read_posts.zip")

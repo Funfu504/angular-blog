@@ -5,6 +5,7 @@ from blogservicepkg.config import settings
 from blogservicepkg.model.blogpost import BlogPost
 from blogservicepkg.repository.dbmapper import PostDBMapper
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -31,18 +32,32 @@ def get_post_table():
 # function passes in a target post id and returns a list of dictionaries.
 # each dictionary entity contains an element of a single blog post.
 def get_post(post_id: str) -> list[dict] :
+
+    start = time.perf_counter()
+
     table = get_post_table()
     response = table.query(
         KeyConditionExpression=Key("Post_Id").eq(post_id))
     
+    logger.info(
+    f"Post_Id execution took {(time.perf_counter()-start)*1000:.0f} ms")
+
     items = response["Items"]
     return items
 
 # function passes in a target post id and returns a list of dictionaries.
 # each dictionary entity contains an element of a single blog post.
 def get_posts(post_element_type: str, limit: int) -> list[str] :
-    table = get_post_table()
     
+    dbstart = time.perf_counter()
+    
+    table = get_post_table()
+
+    logger.info(
+    f"DynamoDB init took {(time.perf_counter()-dbstart)*1000:.0f} ms")
+    
+    qrystart = time.perf_counter()
+
     response = table.query(
         IndexName="GSI_PostsByPostDate",
         KeyConditionExpression=Key("Post_Element_Type").eq(post_element_type),
@@ -50,8 +65,14 @@ def get_posts(post_element_type: str, limit: int) -> list[str] :
         Limit=limit
     )
 
+    logger.info(
+    f"GSI_PostsByPostDate execution took {(time.perf_counter()-qrystart)*1000:.0f} ms")
+
     #the below code retrieves the Post_Ids from the response list of dictionary items
     post_ids = [item["Post_Id"] for item in response["Items"]]
+
+    logger.info(
+    f"Gathering Post Ids took {(time.perf_counter()-dbstart)*1000:.0f} ms")
 
     #items = response["Items"]
     return post_ids
@@ -79,30 +100,5 @@ def put_post(items: list[dict]):
     for item in items:
         response = table.put_item(Item=item)
 
-def putBlogPost(post: BlogPost):
-    theDBRecordList = PostDBMapper.build_dynamoDb_entries(post)
-    logger.info("image url: %s", post.images[0].imageUrl)
-    put_post(theDBRecordList)
-
-#fetch a post based on the post id from the database and return the domain entity.
-def getBlogPost(post_id: str) -> BlogPost:
-    thePost = get_post(post_id)
-    return PostDBMapper.build_post_entity(thePost)
-
-#fetch a list of featured posts from the database and return the list as domain entities.
-def getFeaturedBlogPosts(numPosts: int) -> list[BlogPost]:
-    postIdList = get_featured_posts("METADATA", numPosts)
-    postList = []
-    for postId in postIdList :        
-        postList.append(getBlogPost(postId))
-    return postList
-
-#fetch a list of posts from the database and return the list as domain entities.
-def getBlogPosts(numPosts: int) -> list[BlogPost]:
-    postIdList = get_posts("METADATA", numPosts)
-    postList = []
-    for postId in postIdList :        
-        postList.append(getBlogPost(postId))
-    return postList
 
 

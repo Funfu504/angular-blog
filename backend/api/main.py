@@ -1,6 +1,7 @@
 #FastAPI endpoint
 from fastapi import FastAPI, HTTPException
-from blogservicepkg.service.handlers import readPost, readFeaturedPosts, readBlogPosts, createPost, generateS3UploadUrl
+from blogservicepkg.service.services import readPost, readFeaturedPosts, readBlogPosts, createPost
+from blogservicepkg.service.uploads import generateS3UploadUrl
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest
 from core.transport.response import success_response, failure_response
 from fastapi.middleware.cors import CORSMiddleware

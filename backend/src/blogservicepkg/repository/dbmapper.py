@@ -2,6 +2,7 @@ import json
 from blogservicepkg.model.blogpost import BlogPost
 from ulid import ULID
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -10,6 +11,9 @@ class PostDBMapper:
     @staticmethod
     #function to convert the fragmented database records associated to a blog post into a BlogPost domain entity.
     def build_post_entity(items: list[dict]) -> BlogPost:
+
+        start = time.perf_counter()
+
         if not items:
             return None
         
@@ -31,6 +35,8 @@ class PostDBMapper:
             elif element_type == "IMAGE":
                 post.addImage(value_element.get("filename"), value_element.get("url"), value_element.get("alttext"))
 
+        logger.info(
+        f"Building Post entity took {(time.perf_counter()-start)*1000:.0f} ms")
         logger.info("Number of Images: %s", len(post.images))
         logger.info("Image: %s", post.images[0].altText)
 

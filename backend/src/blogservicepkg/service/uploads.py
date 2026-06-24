@@ -22,7 +22,7 @@ def get_s3():
         logger.exception(f"Error connecting to S3: {repr(e)}")
         raise
 
-def GenerateS3UploadURL(item: UploadRequest) -> UploadResponse:
+def generateS3UploadUrl(item: UploadRequest) -> UploadResponse:
 
     logger.info("GeneratingS3UploadURL")
     logger.info(settings.AWS_ACCESS_KEY_ID)
