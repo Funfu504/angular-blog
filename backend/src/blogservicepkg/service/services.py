@@ -9,14 +9,12 @@ import time
 logger = logging.getLogger(__name__)
 
 #retrieves a single post tied to a Post Id.
-def readPost(postId : str) -> dict :        
-    thePost = get_post(postId)    
-    theBlogPost = PostDBMapper.build_post_entity(thePost)
-    thePost = PostAPIMapper.build_post_response(theBlogPost)    
-    return thePost
+def readPost(postId : str) -> BlogPost :        
+    theBlogPost = get_post(postId)
+    return theBlogPost
 
 #retrieves a defined number of featured posts.
-def readFeaturedPosts(numPosts : int) -> list[dict] :    
+def readFeaturedPosts(numPosts : int) -> list[BlogPost] :    
     listBlogPosts = []    
     postIdList = get_featured_posts("METADATA", numPosts)    
     for postId in postIdList :        
@@ -24,7 +22,7 @@ def readFeaturedPosts(numPosts : int) -> list[dict] :
     return listBlogPosts
 
 #retrieves a defined number of featured posts.
-def readBlogPosts(numPosts : int) -> list[dict] :    
+def readBlogPosts(numPosts : int) -> list[BlogPost] :    
     logger.info(f"Fetching {numPosts} posts")
     listBlogPosts = []
     start = time.perf_counter()
@@ -36,12 +34,9 @@ def readBlogPosts(numPosts : int) -> list[dict] :
     return listBlogPosts
 
 
-def createPost(post : CreatePostRequest):
-    logger.info("Saving new post tited: %s", post.title)
-    logger.info("Saving new post img filename %s", post.imageFileName)
-    logger.info("Saving new post img alt text %s", post.imageAltText)
-    logger.info("Saving new post img url: %s", post.imageUrl)
-    theBlogPost = PostAPIMapper.build_post_create(post)
-    logger.info("image url: %s", theBlogPost.images[0].imageUrl)
-    theDBRecordList = PostDBMapper.build_dynamoDb_entries(theBlogPost)    
-    put_post(theDBRecordList)
+def createPost(post : BlogPost):
+    logger.info("Saving new post tited: %s", post.metadata.title)
+    logger.info("Saving new post img filename %s", post.images[0].fileName)
+    logger.info("Saving new post img alt text %s", post.images[0].altText)
+    logger.info("Saving new post img url: %s", post.images[0].imageUrl)       
+    put_post(post)

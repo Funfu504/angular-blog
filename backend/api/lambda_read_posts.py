@@ -1,8 +1,8 @@
-from blogservicepkg.service.handlers import readPost, readFeaturedPosts, readBlogPosts
-import json
+from blogservicepkg.service.services import readBlogPosts
 from core.logging import setup_logging
 from core.transport.request import parse_event_model, logRequest
 from core.transport.response import success_response, failure_response
+from blogservicepkg.service.apimapper import PostAPIMapper
 import logging
 
 setup_logging()
@@ -20,7 +20,13 @@ def handler(event, context):
         if num_posts is None and "num_posts" in event:
             num_posts = event["num_posts"]
 
-        result = readBlogPosts(int(num_posts))
+        thePosts = readBlogPosts(int(num_posts))
+
+        result = []
+
+        for post in thePosts:
+            result.append(PostAPIMapper.build_post_response(post))        
+
         return success_response(result)
 
     except Exception as e:

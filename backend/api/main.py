@@ -4,6 +4,7 @@ from blogservicepkg.service.services import readPost, readFeaturedPosts, readBlo
 from blogservicepkg.service.uploads import generateS3UploadUrl
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest
 from core.transport.response import success_response, failure_response
+from blogservicepkg.service.apimapper import PostAPIMapper
 from fastapi.middleware.cors import CORSMiddleware
 from core.logging import setup_logging
 import logging
@@ -35,20 +36,26 @@ def read_posts(
     ):
 
     if featured == True:
-        response = readFeaturedPosts(num_posts)
+        thePosts = readFeaturedPosts(num_posts)
     else:
-        response = readBlogPosts(num_posts)
+        thePosts = readBlogPosts(num_posts)
+
+    response = []
+
+    for post in thePosts:
+        response.append(PostAPIMapper.build_post_response(post))
 
     return response
 
 @app.get("/posts/{post_id}")
-def read_post(post_id: str | None = None):
-    return readPost(post_id)
+def read_post(post_id: str | None = None):        
+    return PostAPIMapper.build_post_response(readPost(post_id))
 
 @app.post("/post")
 def save_post(request: CreatePostRequest):
-    try:        
-        createPost(request)
+    try:
+        blogPost = PostAPIMapper.build_post_create(request)
+        createPost(blogPost)
         return request
     except Exception as e:
         logger.exception(f"Error reading item: {repr(e)}")

@@ -12,9 +12,7 @@ import { ApiPaths } from "../enums/api-paths"
 export class BlogService {
   posts : IBlogEntry[] = [];
   
-  constructor(private http: HttpClient) {    
-    //this.getPosts(10).subscribe(p => this.posts = p);    
-  }
+  constructor(private http: HttpClient) {  }
 
   getPosts(num_posts: number): Observable<IBlogEntry[]> {
     
@@ -87,11 +85,6 @@ export class BlogService {
     )
   }
 
-  /*
-  sortBlogPosts(): Observable<IBlogEntry[] | undefined> {
-    return of(this.posts.sort((a, b) => b.postDate.getTime() - a.postDate.getTime()))
-  }*/
-
   createBlogPost(post: ICreateBlogEntry, file: FormData): Observable<IBlogEntry | undefined> {
     
     const theGenImageUploadUrl = `${environment.baseUrl}${ApiPaths.GenUploadUrl}`    
@@ -134,49 +127,5 @@ export class BlogService {
     console.log("THE CONTENT", post)
     return this.http.post<IBlogEntryDto>(theCreatePostUrl, post)
     .pipe(map(dto => this.mapBlogEntry(dto)))
-  }
-
-  getBlogEntryList(){
-    this.posts = [
-      {
-        postId: "1",
-        title: "My First Blog Post",
-        imageUrl: "/assets/images/FeelsTheCat.jpg",
-        imageAltText: "Feels The Cat",
-        blogText: "Wall of Text",
-        summary: "summary",
-        postDate: new Date(2026, 1, 31),
-        featured: false},
-      {
-        postId: "2",
-        title: "Learning Python",
-        imageUrl: "/assets/images/PythonLogo.png",
-        imageAltText: "Official Python Logo",
-        blogText: "Wall of Text",
-        summary: "summary",        
-        postDate: new Date(2026, 1, 30),
-        featured: true
-      },
-      {
-        postId: "3",
-        title: "Learning Angular",
-        imageUrl: "/assets/images/AngularLogo.png",
-        imageAltText: "Angular Logo",
-        blogText: "Wall of Text",
-        summary: "summary",        
-        postDate: new Date(2026, 1, 29),
-        featured: true
-      },
-      {
-        postId: "4",
-        title: "About Me",
-        imageUrl: "",
-        imageAltText: "none",
-        blogText: "I am the owner of this blog.",
-        summary: "summary",
-        postDate: new Date(2026, 1, 1),
-        featured: false
-      }      
-    ]
   }
 }

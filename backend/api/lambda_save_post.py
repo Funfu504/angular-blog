@@ -1,5 +1,7 @@
-from blogservicepkg.service.handlers import createPost, generateS3UploadUrl
+from blogservicepkg.service.services import createPost
+from blogservicepkg.service.uploads import generateS3UploadUrl
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest, UploadResponse
+from blogservicepkg.service.apimapper import PostAPIMapper
 from core.transport.request import parse_event_model, logRequest
 from core.transport.response import success_response, failure_response
 from pydantic import ValidationError
@@ -13,7 +15,8 @@ logger = logging.getLogger(__name__)
 
 def processPostRequest(event):
     request = parse_event_model(event, CreatePostRequest)
-    createPost(request)
+    blogPost = PostAPIMapper.build_post_create(request)
+    createPost(blogPost)
     return success_response(request.model_dump())
 
 def processUploadRequest(event):

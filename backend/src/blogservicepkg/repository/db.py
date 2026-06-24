@@ -31,7 +31,7 @@ def get_post_table():
 
 # function passes in a target post id and returns a list of dictionaries.
 # each dictionary entity contains an element of a single blog post.
-def get_post(post_id: str) -> list[dict] :
+def get_post(post_id: str) -> BlogPost :
 
     start = time.perf_counter()
 
@@ -43,7 +43,8 @@ def get_post(post_id: str) -> list[dict] :
     f"Post_Id execution took {(time.perf_counter()-start)*1000:.0f} ms")
 
     items = response["Items"]
-    return items
+    theBlogPost = PostDBMapper.build_post_entity(items)
+    return theBlogPost
 
 # function passes in a target post id and returns a list of dictionaries.
 # each dictionary entity contains an element of a single blog post.
@@ -95,9 +96,11 @@ def get_featured_posts(post_element_type: str, limit: int) -> list[str] :
     
     return post_ids
 
-def put_post(items: list[dict]):
+#def put_post(items: list[dict]):
+def put_post(items: BlogPost):
+    theDBRecordList = PostDBMapper.build_dynamoDb_entries(items) 
     table = get_post_table()
-    for item in items:
+    for item in theDBRecordList:
         response = table.put_item(Item=item)
 
 
