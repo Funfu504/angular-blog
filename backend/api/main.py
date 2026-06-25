@@ -1,7 +1,8 @@
 #FastAPI endpoint
 from fastapi import FastAPI, HTTPException
-from blogservicepkg.service.services import readPost, readFeaturedPosts, readBlogPosts, createPost
-from blogservicepkg.service.uploads import generateS3UploadUrl
+from blogservicepkg.service.services import PostService
+from blogservicepkg.repository.db import Repository
+from blogservicepkg.service.uploads import AssetService
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest
 from core.transport.response import success_response, failure_response
 from blogservicepkg.service.apimapper import PostAPIMapper
@@ -14,6 +15,9 @@ setup_logging()
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+repo = Repository()
+postSvc = PostService(repo)
+assetSvc = AssetService()
 
 #added to fix issue where UI and Service couldn't communicate because it appeared to be
 #running on 2 different domains.
@@ -36,9 +40,9 @@ def read_posts(
     ):
 
     if featured == True:
-        thePosts = readFeaturedPosts(num_posts)
+        thePosts = postSvc.readFeaturedPosts(num_posts)
     else:
-        thePosts = readBlogPosts(num_posts)
+        thePosts = postSvc.readBlogPosts(num_posts)
 
     response = []
 
@@ -49,13 +53,13 @@ def read_posts(
 
 @app.get("/posts/{post_id}")
 def read_post(post_id: str | None = None):        
-    return PostAPIMapper.build_post_response(readPost(post_id))
+    return PostAPIMapper.build_post_response(postSvc.readPost(post_id))
 
 @app.post("/post")
 def save_post(request: CreatePostRequest):
     try:
         blogPost = PostAPIMapper.build_post_create(request)
-        createPost(blogPost)
+        postSvc.createPost(blogPost)
         return request
     except Exception as e:
         logger.exception(f"Error reading item: {repr(e)}")
@@ -67,7 +71,7 @@ def save_post(request: CreatePostRequest):
 @app.post("/assets/upload-url")
 def generate_S3_upload_url(request: UploadRequest):
     try:
-        response = generateS3UploadUrl(request)
+        response = assetSvc.generateS3UploadUrl(request)
         return response
     except Exception as e:
         logger.exception(f"Error reading item: {repr(e)}")

@@ -1,4 +1,5 @@
-from blogservicepkg.service.services import readBlogPosts
+from blogservicepkg.service.services import PostService
+from blogservicepkg.repository.db import Repository
 from core.logging import setup_logging
 from core.transport.request import parse_event_model, logRequest
 from core.transport.response import success_response, failure_response
@@ -6,6 +7,9 @@ from blogservicepkg.service.apimapper import PostAPIMapper
 import logging
 
 setup_logging()
+
+repo = Repository()
+postSvc = PostService(repo)
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +24,7 @@ def handler(event, context):
         if num_posts is None and "num_posts" in event:
             num_posts = event["num_posts"]
 
-        thePosts = readBlogPosts(int(num_posts))
+        thePosts = postSvc.readBlogPosts(int(num_posts))
 
         result = []
 
