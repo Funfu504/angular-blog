@@ -1,9 +1,11 @@
 from blogservicepkg.model.post import UploadRequest
-from blogservicepkg.service.uploads import GenerateS3UploadURL
+from blogservicepkg.service.uploads import AssetService
+
+assetSvc = AssetService()
 
 def test_GenerateS3UploadURL():
     item = UploadRequest(userId="TestUser", filename="StrangerThingsLogo.png", contentType="image/png")
-    result = GenerateS3UploadURL(item)
+    result = assetSvc.generateS3UploadUrl(item)
     assert result.fileName == "StrangerThingsLogo.png"
     newFileName = result.fileKey.split("/")    
     assert len(newFileName[2]) > 0

@@ -1,10 +1,14 @@
-from blogservicepkg.service.services import readBlogPost
+from blogservicepkg.service.services import PostService
+from blogservicepkg_tests.repository.fake_db import RepositoryFake
 from blogservicepkg.service.apimapper import PostAPIMapper
 from blogservicepkg.model.post import SavePostRequest
 from blogservicepkg.model.blogpost import BlogPost
 
+fakeRepo = RepositoryFake()
+postSvc = PostService(fakeRepo)
+
 def test_build_post_response():
-    result = readBlogPost("POST#001")
+    result = postSvc.readPost("POST#001")
     mapping = PostAPIMapper.build_post_response(result)
     assert mapping["postId"] == "POST#001"
     assert mapping["blogText"] == "Wall of text"
