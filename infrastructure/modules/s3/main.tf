@@ -89,3 +89,46 @@ resource "aws_s3_bucket_policy" "assets" {
     ]
   })
 }
+
+resource "aws_s3_bucket" "blog_frontend" {
+  bucket = "angular-blog-dev-assets"
+
+  tags = merge(var.tags, {
+    Name = "blog_frontend"
+  })
+}
+
+resource "aws_s3_bucket_public_access_block" "blog_frontend" {
+  bucket = aws_s3_bucket.blog_frontend.id
+
+  block_public_acls       = true
+  ignore_public_acls      = true
+  block_public_policy     = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_versioning" "blog_frontend" {
+  bucket = aws_s3_bucket.blog_frontend.id
+
+  versioning_configuration {
+    status = "Disabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "blog_frontend" {
+  bucket = aws_s3_bucket.blog_frontend.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "blog_frontend" {
+  bucket = aws_s3_bucket.blog_frontend.id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}

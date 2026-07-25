@@ -24,10 +24,18 @@ module "s3" {
   cloudfront_distribution_code_domain = "https://d3ecwobg2ch99d.cloudfront.net"
 }
 
+module "waf" {
+  source = "./modules/waf"
+
+  tags = local.common_tags
+}
+
 module "cloudfront" {
   source = "./modules/cloudfront"
 
   tags = local.common_tags
 
-  bucket_regional_domain_name = module.s3.bucket_regional_domain_name
+  asset_bucket_regional_domain_name = module.s3.asset_bucket_regional_domain_name
+  blog_frontend_bucket_regional_domain_name = module.s3.blog_frontend_bucket_regional_domain_name
+  blog_frontend_waf_acl_id = module.waf.blog_frontend_acl_arn
 }
