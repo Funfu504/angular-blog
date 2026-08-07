@@ -1,5 +1,6 @@
 from blogservicepkg.service.services import PostService
 from blogservicepkg.repository.db import Repository
+from blogservicepkg.repository.dbmapper import PostDBMapper
 from blogservicepkg.service.uploads import AssetService
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest, UploadResponse
 from blogservicepkg.service.apimapper import PostAPIMapper
@@ -11,7 +12,8 @@ import logging
 
 setup_logging()
 
-repo = Repository()
+dbmapper = PostDBMapper()
+repo = Repository(dbmapper)
 postSvc = PostService(repo)
 assetSvc = AssetService()
 

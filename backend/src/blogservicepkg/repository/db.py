@@ -11,6 +11,11 @@ logger = logging.getLogger(__name__)
 
 class Repository:
 
+    mapper: PostDBMapper = None
+
+    def __init__(self, mapper: PostDBMapper):
+        self.mapper = mapper
+
     #function initializes the connection to the DynamoDB instance for the Blog App.
     def get_dynamodb(self):
         try:    
@@ -45,7 +50,7 @@ class Repository:
         f"Post_Id execution took {(time.perf_counter()-start)*1000:.0f} ms")
 
         items = response["Items"]
-        theBlogPost = PostDBMapper.build_post_entity(items)
+        theBlogPost = self.mapper.build_post_entity(items)
         return theBlogPost
 
     # function passes in a target post id and returns a list of dictionaries.
@@ -100,7 +105,7 @@ class Repository:
 
     #def put_post(items: list[dict]):
     def put_post(self, items: BlogPost):
-        theDBRecordList = PostDBMapper.build_dynamoDb_entries(items) 
+        theDBRecordList = self.mapper.build_dynamoDb_entries(items) 
         table = self.get_post_table()
         for item in theDBRecordList:
             response = table.put_item(Item=item)

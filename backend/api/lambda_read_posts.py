@@ -1,5 +1,6 @@
 from blogservicepkg.service.services import PostService
 from blogservicepkg.repository.db import Repository
+from blogservicepkg.repository.dbmapper import PostDBMapper
 from core.logging import setup_logging
 from core.transport.request import parse_event_model, logRequest
 from core.transport.response import success_response, failure_response
@@ -8,7 +9,8 @@ import logging
 
 setup_logging()
 
-repo = Repository()
+dbmapper = PostDBMapper()
+repo = Repository(dbmapper)
 postSvc = PostService(repo)
 
 logger = logging.getLogger(__name__)

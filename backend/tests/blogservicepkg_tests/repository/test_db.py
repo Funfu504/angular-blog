@@ -1,6 +1,8 @@
 from blogservicepkg.repository.db import Repository
+from blogservicepkg.repository.dbmapper import PostDBMapper
 
-repo = Repository()
+dbmapper = PostDBMapper()
+repo = Repository(dbmapper)
 
 # these tests are overly generous in their asserts because they are testing
 #  connectivity to the datastore, DynamoDB (DDB), not business logic.

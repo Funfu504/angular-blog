@@ -8,9 +8,8 @@ logger = logging.getLogger(__name__)
 
 class PostDBMapper:
 
-    @staticmethod
     #function to convert the fragmented database records associated to a blog post into a BlogPost domain entity.
-    def build_post_entity(items: list[dict]) -> BlogPost:
+    def build_post_entity(self, items: list[dict]) -> BlogPost:
 
         start = time.perf_counter()
 
@@ -30,6 +29,7 @@ class PostDBMapper:
                 featured, postDate = item["Featured_Post_Date"].split("#", 1)
                 post.addPostDate(postDate)
                 post.addFeaturedFlag(featured)
+
             elif element_type == "CONTENT":
                 post.addContent(value_element.get("blogtext"))            
             elif element_type == "IMAGE":
@@ -42,9 +42,8 @@ class PostDBMapper:
 
         return post
 
-    @staticmethod
     #function to convert the BlogPost domain entity into fragmented database records associated to a blog post.
-    def build_dynamoDb_entries(items: BlogPost) -> list[dict]:
+    def build_dynamoDb_entries(self, items: BlogPost) -> list[dict]:
         if not items:
             return None
         
