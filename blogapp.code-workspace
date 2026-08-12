@@ -4,5 +4,7 @@
     { "path": "backend" },
     { "path": "infrastructure" }
   ],
-  "settings": {}
+  "settings": {
+    "powershell.cwd": "backend"
+  }
 }

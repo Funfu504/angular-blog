@@ -26,6 +26,15 @@ class RepositoryFake:
             post.addPostDate(postDate="2/1/2026")
             post.addFeaturedFlag(featured="1")
 
+        if (post_id == "POST#003"):
+            post = BlogPost(postId="POST#003")
+            post.addMetadata(title="My Python Journey", summary="My Python Experience")
+            post.addImage(fileName="PythonLogo.png", imageUrl="/users/Moe/PythonLogo.png", altText="Official Python Logo")
+            post.addImage(fileName="PythonLogo.png", imageUrl="/users/Moe/PythonLogo.png", altText="Official Python Logo")
+            post.addContent(content="Wall of text")
+            post.addPostDate(postDate="2/1/2026")
+            post.addFeaturedFlag(featured="1")
+
         return post
     
     def get_posts(self, post_element_type: str, limit: int) -> list[str] :

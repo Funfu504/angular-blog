@@ -34,8 +34,21 @@ class Image:
         self.imageUrl = imageUrl
         self.altText = altText
 
-    def updateImageUrl(self, imageUrl : str):
-        self.imageUrl = imageUrl        
+    def isValid(self):
+        return (
+            self.fileName and self.fileName.strip()
+            and self.imageUrl and self.imageUrl.strip()
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, Image):
+            return NotImplemented
+
+        return (
+            self.fileName == other.fileName
+            and self.imageUrl == other.imageUrl
+            and self.altText == other.altText
+        )
 
     def __str__(self):
         return f"{self.imageUrl} is an image of {self.altText}.  It's name is {self.fileName}."
@@ -66,7 +79,10 @@ class BlogPost:
         self.content = Content(content)
 
     def addImage(self, fileName: str, imageUrl: str, altText: str):
-        self.images.append(Image(fileName, imageUrl, altText))
+        newImage = Image(fileName, imageUrl, altText)
+
+        if (newImage.isValid() and newImage not in self.images):
+            self.images.append(newImage)
     
 
 

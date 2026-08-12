@@ -1,6 +1,6 @@
-from blogservicepkg.repository.dbmapper import PostDBMapper
+from blogservicepkg.repository.dbMigrationMapper import PostDBMigrationMapper
 
-mapper = PostDBMapper()
+mapper = PostDBMigrationMapper()
 
 def get_post_test_data(post_id: str):
 
@@ -15,8 +15,7 @@ def get_post_test_data(post_id: str):
 
     if (post_id == "POST#002"):
         post = [
-            {"Post_Id": "POST#002", "Post_Element_Type": "METADATA", "Post_Date": "2/1/2026", "Featured_Post_Date": "1#2/1/2026", "Value": "{ \"title\": \"My Python Journey\", \"summary\": \"My Python Experience\" }"},
-            {"Post_Id": "POST#002", "Post_Element_Type": "IMAGE", "Value": "{ \"url\": \"/users/Moe/PythonLogo.png\", \"alttext\": \"Official Python Logo\", \"filename\": \"PythonLogo.png\" }"},
+            {"Post_Id": "POST#002", "Post_Element_Type": "METADATA", "Post_Date": "2/1/2026", "Featured_Post_Date": "1#2/1/2026", "Value": "{ \"title\": \"My Python Journey\", \"summary\": \"My Python Experience\", \"url\": \"/users/Moe/PythonLogo.png\", \"alttext\": \"Official Python Logo\", \"filename\": \"PythonLogo.png\"  }"},
             {"Post_Id": "POST#002", "Post_Element_Type": "CONTENT", "Value": "{ \"blogtext\": \"Wall of text\" }"},
         ]
 
@@ -38,6 +37,17 @@ def test_build_BlogPost_Entity():
     assert domainEntity.postDate == "1/29/2026"
     assert domainEntity.featured == "0"
     assert domainEntity.content.blogtext == "Wall of text"
+    assert len(domainEntity.images) == 1
+
+# test transform of post from DB records to UI post.
+def test_build_BlogPost_Entity_dupe_Image():
+    postList = get_post_test_data("POST#002")
+    domainEntity = mapper.build_post_entity(postList)
+    assert domainEntity.postId == "POST#002"
+    assert domainEntity.postDate == "2/1/2026"
+    assert domainEntity.featured == "1"
+    assert domainEntity.content.blogtext == "Wall of text"
+    assert len(domainEntity.images) == 1
 
 # test transform of post from DB records to UI post.
 def test_build_BlogPost_Entity_dupe_Image():
@@ -55,10 +65,9 @@ def test_build_DynamoDB_Records():
     domainEntity = mapper.build_post_entity(postList)
     dbList = mapper.build_dynamoDb_entries(domainEntity)
 
-    assert len(dbList) == 3
+    assert len(dbList) == 2
     assert dbList[0]["Post_Element_Type"] == "METADATA"
     assert dbList[1]["Post_Element_Type"] == "CONTENT"
-    assert dbList[2]["Post_Element_Type"] == "IMAGE"
 
 # test transform of Domain entity to DB records (CREATES).
 def test_build_DynamoDB_Records():

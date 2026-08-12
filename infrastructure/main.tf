@@ -39,3 +39,11 @@ module "cloudfront" {
   blog_frontend_bucket_regional_domain_name = module.s3.blog_frontend_bucket_regional_domain_name
   blog_frontend_waf_acl_id = module.waf.blog_frontend_acl_arn
 }
+
+module "lambda" {
+  source = "./modules/lambda"
+
+  tags = local.common_tags
+
+  iam_lambda_exec_arn = aws_iam_role.lambda_exec.arn
+}

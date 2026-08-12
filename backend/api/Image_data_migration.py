@@ -1,0 +1,55 @@
+# I need to merge the Image and Metadata records in order to resolve a performance issue
+# discovered during test.  Page load is taking 3 seconds due to a fan-out issue introduced
+# by a change in access pattern.  This script is going to leverage the service layer to
+# facilitate the data migration.
+
+from blogservicepkg.service.services import PostService
+from blogservicepkg.repository.db import Repository
+from blogservicepkg.repository.dbMigrationMapper import PostDBMigrationMapper
+from core.logging import setup_logging
+from core.transport.request import parse_event_model, logRequest
+from core.transport.response import success_response, failure_response
+import logging
+
+setup_logging()
+
+dbmapper = PostDBMigrationMapper()
+repo = Repository(dbmapper)
+postSvc = PostService(repo)
+
+logger = logging.getLogger(__name__)
+
+#entry point for lambda function.
+def handler(event, context):
+    try:
+        logRequest(event)
+
+        num_posts = 0
+
+        if "num_posts" in event:
+            num_posts = event["num_posts"]
+            result = execute_migration(num_posts)
+
+        return success_response(result)
+
+    except Exception as e:
+        logger.exception(f"Error reading item: {repr(e)}")
+        return failure_response({"error": str(e)}, 500)            
+
+def execute_migration(num_posts: int) -> bool: 
+    try:        
+        thePosts = postSvc.readBlogPosts(int(num_posts))
+
+        for post in thePosts:
+            logger.info("migrating post_id: %s", post.postId)
+            postSvc.createPost(post)
+
+        return True
+
+    except Exception as e:
+        logger.exception(f"Error executing migration: {repr(e)}")
+        return False
+
+#local run entry point
+if __name__ == "__main__":
+    execute_migration(2)

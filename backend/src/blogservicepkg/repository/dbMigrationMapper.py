@@ -6,7 +6,7 @@ import time
 
 logger = logging.getLogger(__name__)
 
-class PostDBMapper:
+class PostDBMigrationMapper:
 
     #function to convert the fragmented database records associated to a blog post into a BlogPost domain entity.
     def build_post_entity(self, items: list[dict]) -> BlogPost:
@@ -50,12 +50,13 @@ class PostDBMapper:
         #if no postId is present at this point, it's a new post.  Generate a postId.
         if not items.postId or items.postId == "0":
             items.postId = str(ULID())
+            logger.info("New postId created unexpectedly: %s", items.postId)
         
         featured=int(items.featured)
 
 
         metadata = {
-            "Post_Id": f"POST#{items.postId}",
+            "Post_Id": items.postId,
             "Post_Element_Type": "METADATA",
             "Post_Date": items.postDate,
             "Featured_Post_Date": f"{featured}#{items.postDate}",
@@ -64,7 +65,7 @@ class PostDBMapper:
                 "summary": items.metadata.summary,
                 "filename": items.images[0].fileName,
                 "url": items.images[0].imageUrl,
-                "alttext": items.images[0].altText                 
+                "alttext": items.images[0].altText                
             })
         }
 

@@ -30,3 +30,7 @@ output "blog_frontend_bucket_arn" {
 output "blog_frontend_acl_arn" {
   value = module.waf.blog_frontend_acl_arn
 }
+
+output "image_migration_lambda_function_name" {
+  value = module.lambda.migration_lambda_function_name
+}
