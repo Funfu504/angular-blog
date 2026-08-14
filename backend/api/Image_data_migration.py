@@ -7,8 +7,6 @@ from blogservicepkg.service.services import PostService
 from blogservicepkg.repository.db import Repository
 from blogservicepkg.repository.dbMigrationMapper import PostDBMigrationMapper
 from core.logging import setup_logging
-from core.transport.request import parse_event_model, logRequest
-from core.transport.response import success_response, failure_response
 import logging
 
 setup_logging()
@@ -22,7 +20,7 @@ logger = logging.getLogger(__name__)
 #entry point for lambda function.
 def handler(event, context):
     try:
-        logRequest(event)
+        logger.info("Starting Migration")
 
         num_posts = 0
 
@@ -30,11 +28,13 @@ def handler(event, context):
             num_posts = event["num_posts"]
             result = execute_migration(num_posts)
 
-        return success_response(result)
+        logger.info("Migration Complete")
+
+        return result
 
     except Exception as e:
         logger.exception(f"Error reading item: {repr(e)}")
-        return failure_response({"error": str(e)}, 500)            
+        return False            
 
 def execute_migration(num_posts: int) -> bool: 
     try:        

@@ -39,8 +39,9 @@ class PostService:
 
 
     def createPost(self, post : BlogPost):
-        logger.info("Saving new post tited: %s", post.metadata.title)
-        logger.info("Saving new post img filename %s", post.images[0].fileName)
-        logger.info("Saving new post img alt text %s", post.images[0].altText)
-        logger.info("Saving new post img url: %s", post.images[0].imageUrl)       
+        image = post.getImage(0) 
+        logger.info("Saving new post tited: %s", post.metadata.title)        
+        logger.info("Saving new post img filename %s", image.fileName if image else "None")
+        logger.info("Saving new post img alt text %s", image.altText if image else "None")
+        logger.info("Saving new post img url: %s", image.imageUrl if image else "None")       
         self.repo.put_post(post)

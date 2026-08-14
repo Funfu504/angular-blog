@@ -2,8 +2,8 @@ from blogservicepkg.service.services import PostService
 from blogservicepkg.repository.db import Repository
 from blogservicepkg.repository.dbmapper import PostDBMapper
 from core.logging import setup_logging
-from core.transport.request import parse_event_model, logRequest
-from core.transport.response import success_response, failure_response
+from core.transport.api_request import parse_event_model, logRequest
+from core.transport.api_response import success_response, failure_response
 from blogservicepkg.service.apimapper import PostAPIMapper
 import logging
 

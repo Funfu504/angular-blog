@@ -5,7 +5,7 @@ from blogservicepkg.repository.db import Repository
 from blogservicepkg.repository.dbmapper import PostDBMapper
 from blogservicepkg.service.uploads import AssetService
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest
-from core.transport.response import success_response, failure_response
+from core.transport.api_response import success_response, failure_response
 from blogservicepkg.service.apimapper import PostAPIMapper
 from fastapi.middleware.cors import CORSMiddleware
 from core.logging import setup_logging

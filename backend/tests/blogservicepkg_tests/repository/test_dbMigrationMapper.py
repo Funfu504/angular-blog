@@ -40,7 +40,7 @@ def test_build_BlogPost_Entity():
     assert len(domainEntity.images) == 1
 
 # test transform of post from DB records to UI post.
-def test_build_BlogPost_Entity_dupe_Image():
+def test_build_BlogPost_Entity_Enhanced_MetaData():
     postList = get_post_test_data("POST#002")
     domainEntity = mapper.build_post_entity(postList)
     assert domainEntity.postId == "POST#002"
@@ -60,7 +60,7 @@ def test_build_BlogPost_Entity_dupe_Image():
     assert len(domainEntity.images) == 1
 
 # test transform of Domain entity to DB records (UPDATES).
-def test_build_DynamoDB_Records():
+def test_build_DynamoDB_Records_UPDATE_POST():
     postList = get_post_test_data("POST#001")
     domainEntity = mapper.build_post_entity(postList)
     dbList = mapper.build_dynamoDb_entries(domainEntity)
@@ -70,7 +70,7 @@ def test_build_DynamoDB_Records():
     assert dbList[1]["Post_Element_Type"] == "CONTENT"
 
 # test transform of Domain entity to DB records (CREATES).
-def test_build_DynamoDB_Records():
+def test_build_DynamoDB_Records_NEW_POST():
     postList = get_post_test_data("POST#001")
     postList[0]["postId"] = None
     domainEntity = mapper.build_post_entity(postList)

@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "migration_runner" {
   function_name    = "migration_runner"
   runtime          = "python3.13"
-  handler          = "lambda_migration_runner.handler"
+  handler          = "image_data_migration.handler"
   timeout          = 10  # seconds
   filename         = "../backend/build/image_data_migration.zip"
   source_code_hash = filebase64sha256("../backend/build/image_data_migration.zip")

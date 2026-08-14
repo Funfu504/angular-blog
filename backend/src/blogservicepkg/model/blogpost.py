@@ -83,6 +83,13 @@ class BlogPost:
 
         if (newImage.isValid() and newImage not in self.images):
             self.images.append(newImage)
+
+    def getImage(self, index) -> Image | None:
+
+        try:
+            return self.images[index]
+        except:
+            return None
     
 
 

@@ -8,10 +8,17 @@ class PostAPIMapper:
     def build_post_response(item : BlogPost) -> dict:
         if not item:
             return None
+
+        image = item.getImage(0) 
         
-        post = GetPostResponse(postId = item.postId, title = item.metadata.title, summary = item.metadata.summary,
-                               blogText = item.content.blogtext, imageUrl = item.images[0].imageUrl, 
-                               imageAltText = item.images[0].altText, postDate = item.postDate, featured = item.featured)
+        post = GetPostResponse(postId = item.postId, 
+                               title = item.metadata.title, 
+                               summary = item.metadata.summary,
+                               blogText = item.content.blogtext, 
+                               imageUrl = image.imageUrl if image else None, 
+                               imageAltText = image.altText if image else None, 
+                               postDate = item.postDate, 
+                               featured = item.featured)
 
         return post.model_dump()
     

@@ -4,8 +4,8 @@ from blogservicepkg.repository.dbmapper import PostDBMapper
 from blogservicepkg.service.uploads import AssetService
 from blogservicepkg.model.post import CreatePostRequest, UploadRequest, UploadResponse
 from blogservicepkg.service.apimapper import PostAPIMapper
-from core.transport.request import parse_event_model, logRequest
-from core.transport.response import success_response, failure_response
+from core.transport.api_request import parse_event_model, logRequest
+from core.transport.api_response import success_response, failure_response
 from pydantic import ValidationError
 from core.logging import setup_logging
 import logging

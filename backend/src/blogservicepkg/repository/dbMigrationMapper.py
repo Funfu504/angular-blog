@@ -38,7 +38,6 @@ class PostDBMigrationMapper:
         logger.info(
         f"Building Post entity took {(time.perf_counter()-start)*1000:.0f} ms")
         logger.info("Number of Images: %s", len(post.images))
-        logger.info("Image: %s", post.images[0].altText)
 
         return post
 
@@ -53,7 +52,7 @@ class PostDBMigrationMapper:
             logger.info("New postId created unexpectedly: %s", items.postId)
         
         featured=int(items.featured)
-
+        image = items.getImage(0)
 
         metadata = {
             "Post_Id": items.postId,
@@ -63,9 +62,9 @@ class PostDBMigrationMapper:
             "Value": json.dumps({
                 "title": items.metadata.title,
                 "summary": items.metadata.summary,
-                "filename": items.images[0].fileName,
-                "url": items.images[0].imageUrl,
-                "alttext": items.images[0].altText                
+                "filename": image.fileName if image else None,
+                "url": image.imageUrl if image else None,
+                "alttext": image.altText if image else None                 
             })
         }
 

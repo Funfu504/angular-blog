@@ -26,7 +26,20 @@ def get_post_test_data(post_id: str):
             {"Post_Id": "POST#003", "Post_Element_Type": "IMAGE", "Value": "{ \"url\": \"/users/Moe/PythonLogo.png\", \"alttext\": \"Official Python Logo\", \"filename\": \"PythonLogo.png\" }"},
             {"Post_Id": "POST#003", "Post_Element_Type": "IMAGE", "Value": "{ \"url\": \"/users/Moe/PythonLogo.png\", \"alttext\": \"Official Python Logo\", \"filename\": \"PythonLogo.png\" }"},
             {"Post_Id": "POST#003", "Post_Element_Type": "CONTENT", "Value": "{ \"blogtext\": \"Wall of text\" }"},
-        ]        
+        ]
+
+    if (post_id == "POST#004"):
+        post = [
+            {"Post_Id": "POST#004", "Post_Element_Type": "METADATA", "Post_Date": "1/29/2026", "Featured_Post_Date": "0#1/29/2026", "Value": "{ \"title\": \"My First Blog Post\", \"summary\": \"Introductory Post\" }"},
+            {"Post_Id": "POST#004", "Post_Element_Type": "CONTENT", "Value": "{ \"blogtext\": \"Wall of text\" }"},
+            {"Post_Id": "POST#004", "Post_Element_Type": "IMAGE", "Value": "{ \"url\": \"/users/Moe/PythonLogo.png\", \"alttext\": \"Official Python Logo\" }"},
+        ]
+
+    if (post_id == "POST#005"):
+        post = [
+            {"Post_Id": "POST#005", "Post_Element_Type": "METADATA", "Post_Date": "1/29/2026", "Featured_Post_Date": "0#1/29/2026", "Value": "{ \"title\": \"My First Blog Post\", \"summary\": \"Introductory Post\" }"},            
+            {"Post_Id": "POST#001", "Post_Element_Type": "CONTENT", "Value": "{ \"blogtext\": \"Wall of text\" }"},
+        ]                 
 
     return post
 
@@ -49,20 +62,31 @@ def test_build_BlogPost_Entity_dupe_Image():
     assert domainEntity.content.blogtext == "Wall of text"
     assert len(domainEntity.images) == 1
 
+##### Building Database Records #####
+
 # test transform of Domain entity to DB records (UPDATES).
-def test_build_DynamoDB_Records():
+def test_build_DynamoDB_Records_HasImageData():
     postList = get_post_test_data("POST#001")
     domainEntity = mapper.build_post_entity(postList)
     dbList = mapper.build_dynamoDb_entries(domainEntity)
 
-    assert len(dbList) == 3
+    assert len(dbList) == 2
     assert dbList[0]["Post_Element_Type"] == "METADATA"
     assert dbList[1]["Post_Element_Type"] == "CONTENT"
-    assert dbList[2]["Post_Element_Type"] == "IMAGE"
+
+# test transform of Domain entity to DB records (UPDATES).
+def test_build_DynamoDB_Records_IncompleteImageData():
+    postList = get_post_test_data("POST#004")
+    domainEntity = mapper.build_post_entity(postList)
+    dbList = mapper.build_dynamoDb_entries(domainEntity)
+
+    assert len(dbList) == 2
+    assert dbList[0]["Post_Element_Type"] == "METADATA"
+    assert dbList[1]["Post_Element_Type"] == "CONTENT"
 
 # test transform of Domain entity to DB records (CREATES).
-def test_build_DynamoDB_Records():
-    postList = get_post_test_data("POST#001")
+def test_build_DynamoDB_Records_NoImageData():
+    postList = get_post_test_data("POST#005")
     postList[0]["postId"] = None
     domainEntity = mapper.build_post_entity(postList)
     dbList = mapper.build_dynamoDb_entries(domainEntity)

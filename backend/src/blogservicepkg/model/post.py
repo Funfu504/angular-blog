@@ -44,8 +44,8 @@ class GetPostResponse(BaseModel):
     title: str
     summary: str
     blogText: str
-    imageUrl: str
-    imageAltText: str
+    imageUrl: str | None = None
+    imageAltText: str | None = None
     postDate: str
     featured: bool = False
    
